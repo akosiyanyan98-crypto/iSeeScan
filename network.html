@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Network & Maintenance - iSeeScan</title>
+
+<a href="main.html">← Back to Categories</a>
+
+<style>
+
+.separator{
+    height:2px;
+    background:linear-gradient(to right, transparent, #00eaff, transparent);
+    margin:15px 0;
+    border-radius:5px;
+}
+
+#searchBar{
+    width:80%;
+    max-width:600px;
+    display:block;
+    margin:30px auto;
+    padding:15px 20px;
+    border-radius:25px;
+    border:none;
+    outline:none;
+    font-size:18px;
+    background:#1f2937;
+    color:white;
+    box-shadow:0 0 15px rgba(0,234,255,.3);
+}
+
+#searchBar::placeholder{
+    color:#aaa;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#111827;
+    color:white;
+    padding:40px;
+}
+
+h1{
+    color:#00eaff;
+    text-align:center;
+}
+
+.problem{
+    background:#1f2937;
+    padding:20px;
+    margin:15px 0;
+    border-radius:15px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.problem:hover{
+    transform:translateY(-5px);
+    background:#243b55;
+}
+
+.solution{
+    display:none;
+    margin-top:20px;
+    padding:20px;
+    background:#0f172a;
+    border-radius:15px;
+    border-left:5px solid #00eaff;
+    animation:slideDown .4s;
+}
+
+.tutorial{
+    line-height:1.8;
+    color:#d1d5db;
+}
+
+@keyframes slideDown{
+from{opacity:0; transform:translateY(-15px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+a{
+    color:#00eaff;
+    text-decoration:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Network & Maintenance Problems</h1>
+
+<input 
+type="text" 
+id="searchBar" 
+placeholder="🔍 Search network problem..."
+onkeyup="searchProblem()">
+
+<div id="content"></div>
+
+<br>
+
+<a href="main.html">← Back to Categories</a>
+
+<script>
+
+let networkProblems = [
+
+["No internet connection",
+"Restart router and check cables.",
+"Step 1: Check all LAN/WiFi cables\nStep 2: Restart router\nStep 3: Restart computer/device\nStep 4: Test internet connection"],
+
+["Slow network speed",
+"Check bandwidth usage and connections.",
+"Step 1: Close heavy apps (YouTube, downloads)\nStep 2: Check connected devices\nStep 3: Restart router\nStep 4: Run speed test"],
+
+["IP address conflict",
+"Renew IP address settings.",
+"Step 1: Open Command Prompt\nStep 2: Type ipconfig /release\nStep 3: Type ipconfig /renew\nStep 4: Restart device"],
+
+["Disconnected LAN cable",
+"Reconnect network cable.",
+"Step 1: Check LAN cable connection\nStep 2: Plug it tightly\nStep 3: Check port lights\nStep 4: Test connection"],
+
+["WiFi cannot connect",
+"Check password and network settings.",
+"Step 1: Forget WiFi network\nStep 2: Re-enter password\nStep 3: Restart device\nStep 4: Try reconnecting"],
+
+["Router not working",
+"Restart or reset router.",
+"Step 1: Turn off router\nStep 2: Wait 10 seconds\nStep 3: Turn on router\nStep 4: Reset if still not working"],
+
+["Network cable damaged",
+"Replace the cable.",
+"Step 1: Inspect cable for cuts\nStep 2: Check connector pins\nStep 3: Replace cable\nStep 4: Test network"],
+
+["Weak WiFi signal",
+"Move closer to router.",
+"Step 1: Check distance from router\nStep 2: Remove obstacles (walls, metal)\nStep 3: Move closer\nStep 4: Reconnect WiFi"],
+
+["DNS error",
+"Change or refresh DNS settings.",
+"Step 1: Open network settings\nStep 2: Change DNS to 8.8.8.8\nStep 3: Save settings\nStep 4: Restart connection"],
+
+["Network printer unavailable",
+"Reconnect printer to network.",
+"Step 1: Check printer power\nStep 2: Reconnect WiFi/LAN\nStep 3: Restart printer\nStep 4: Try printing again"],
+
+["Server connection failed",
+"Check server status.",
+"Step 1: Check internet connection\nStep 2: Verify server address\nStep 3: Restart application\nStep 4: Try reconnecting"],
+
+["Network keeps disconnecting",
+"Check cables and router.",
+"Step 1: Inspect cables\nStep 2: Restart router\nStep 3: Reduce connected devices\nStep 4: Test stability"],
+
+["Firewall blocking connection",
+"Adjust firewall settings.",
+"Step 1: Open firewall settings\nStep 2: Allow trusted apps\nStep 3: Disable block rules temporarily\nStep 4: Test connection"],
+
+["Internet service interruption",
+"Contact internet provider.",
+"Step 1: Check router lights\nStep 2: Test other devices\nStep 3: Call ISP support\nStep 4: Wait for restoration"],
+
+["Outdated network driver","Update network drivers.","Step 1: Open Device Manager.\nStep 2: Find Network Adapters.\nStep 3: Right-click your driver.\nStep 4: Select Update Driver.\nStep 5: Restart the computer."],
+
+["Router overheating","Improve router ventilation.","Step 1: Turn off the router.\nStep 2: Place it in a cool open area.\nStep 3: Remove dust around vents.\nStep 4: Avoid stacking devices on top.\nStep 5: Turn router back on."],
+
+["Poor cable management","Organize network cables.","Step 1: Identify tangled cables.\nStep 2: Separate LAN and power cables.\nStep 3: Use cable ties.\nStep 4: Label each cable.\nStep 5: Arrange neatly along desk or wall."],
+
+["Network device failure","Replace faulty equipment.","Step 1: Identify the faulty device.\nStep 2: Check power and connections.\nStep 3: Test device on another port/system.\nStep 4: Confirm failure.\nStep 5: Replace or repair device."],
+
+["Slow file transfer","Check network speed.","Step 1: Close heavy applications.\nStep 2: Check internet/LAN speed.\nStep 3: Restart router.\nStep 4: Use wired connection if possible.\nStep 5: Retry file transfer."],
+
+["Cannot access shared folder","Check permissions.","Step 1: Check folder sharing settings.\nStep 2: Ensure correct user permissions.\nStep 3: Login with correct account.\nStep 4: Enable network discovery.\nStep 5: Try accessing again."],
+
+["LAN not detected","Check network adapter.","Step 1: Check LAN cable connection.\nStep 2: Enable network adapter.\nStep 3: Restart computer.\nStep 4: Update network driver.\nStep 5: Test connection."],
+
+["Network maintenance required","Perform regular checks.","Step 1: Inspect cables and router.\nStep 2: Restart network devices.\nStep 3: Update firmware.\nStep 4: Check performance.\nStep 5: Record maintenance status."],
+
+["Unauthorized devices connected","Secure network access.","Step 1: Open router admin panel.\nStep 2: Check connected devices list.\nStep 3: Block unknown devices.\nStep 4: Change WiFi password.\nStep 5: Enable MAC filtering."],
+
+["No network after restart","Restart network services.","Step 1: Open network settings.\nStep 2: Disable then enable adapter.\nStep 3: Restart router.\nStep 4: Restart computer.\nStep 5: Reconnect network."],
+
+["Connection timeout","Check network stability.","Step 1: Check internet connection.\nStep 2: Restart router.\nStep 3: Test another device.\nStep 4: Reduce network load.\nStep 5: Try again."],
+
+["Incorrect gateway settings","Correct network configuration.","Step 1: Open network settings.\nStep 2: Locate gateway settings.\nStep 3: Set correct gateway IP.\nStep 4: Save changes.\nStep 5: Restart connection."],
+
+["Poor WiFi coverage","Add access points.","Step 1: Check router location.\nStep 2: Remove obstacles.\nStep 3: Install WiFi extender.\nStep 4: Reposition router centrally.\nStep 5: Test signal strength."],
+
+["Network security issue","Update passwords.","Step 1: Open router settings.\nStep 2: Change WiFi password.\nStep 3: Enable WPA2/WPA3 security.\nStep 4: Disconnect unknown devices.\nStep 5: Restart router."],
+
+["Router settings error","Restore correct settings.","Step 1: Access router admin panel.\nStep 2: Check configuration.\nStep 3: Reset to default if needed.\nStep 4: Reconfigure settings.\nStep 5: Save and restart."],
+
+["Cable unplugged","Reconnect cable properly.","Step 1: Check cable end.\nStep 2: Plug firmly into port.\nStep 3: Check indicator lights.\nStep 4: Test connection.\nStep 5: Replace cable if needed."],
+
+["Network adapter disabled","Enable adapter settings.","Step 1: Open Control Panel.\nStep 2: Go to Network Settings.\nStep 3: Enable adapter.\nStep 4: Restart device.\nStep 5: Test connection."],
+
+["Internet speed drops","Check connection usage.","Step 1: Close background downloads.\nStep 2: Check connected devices.\nStep 3: Restart router.\nStep 4: Run speed test.\nStep 5: Contact ISP if needed."],
+
+["Switch malfunction","Restart or replace switch.","Step 1: Check power supply.\nStep 2: Restart switch.\nStep 3: Test ports.\nStep 4: Replace faulty switch.\nStep 5: Reconnect network."],
+
+["Network monitoring problem","Check monitoring tools.","Step 1: Open monitoring software.\nStep 2: Check logs.\nStep 3: Restart tool.\nStep 4: Verify network status.\nStep 5: Update monitoring system."],
+
+["Server unavailable","Check server operation.","Step 1: Ping server.\nStep 2: Check internet connection.\nStep 3: Restart server service.\nStep 4: Contact admin.\nStep 5: Retry connection."],
+
+["Connectivity issue","Test network connection.","Step 1: Restart router.\nStep 2: Check cables.\nStep 3: Test another device.\nStep 4: Run diagnostics.\nStep 5: Reconnect network."],
+
+["Old network equipment","Upgrade devices.","Step 1: Identify old equipment.\nStep 2: Check performance issues.\nStep 3: Replace outdated devices.\nStep 4: Install new hardware.\nStep 5: Configure system."],
+
+["Network password forgotten","Reset wireless password.","Step 1: Access router settings.\nStep 2: Go to wireless section.\nStep 3: Reset password.\nStep 4: Save changes.\nStep 5: Reconnect devices."],
+
+["Maintenance schedule missed","Perform network maintenance.","Step 1: Check last maintenance date.\nStep 2: Inspect all devices.\nStep 3: Update software.\nStep 4: Clean hardware.\nStep 5: Record maintenance."],
+
+["Connection interference","Remove signal obstacles.","Step 1: Identify interference sources.\nStep 2: Move router away from devices.\nStep 3: Change WiFi channel.\nStep 4: Reduce interference.\nStep 5: Test signal."],
+
+["Incorrect firewall rules","Update firewall settings.","Step 1: Open firewall settings.\nStep 2: Check rules list.\nStep 3: Allow necessary connections.\nStep 4: Remove blocking rules.\nStep 5: Test network."],
+
+["Network configuration error","Review settings.","Step 1: Open network settings.\nStep 2: Check IP configuration.\nStep 3: Reset settings if needed.\nStep 4: Apply correct configuration.\nStep 5: Restart connection."],
+
+["Data transfer failure","Check network devices.","Step 1: Check cables.\nStep 2: Restart router.\nStep 3: Reduce network load.\nStep 4: Retry transfer.\nStep 5: Test connection."],
+
+["Unstable wireless connection","Improve signal strength.","Step 1: Move closer to router.\nStep 2: Remove obstacles.\nStep 3: Restart router.\nStep 4: Change channel.\nStep 5: Test connection."],
+
+["Network device overheating","Improve cooling.","Step 1: Turn off device.\nStep 2: Clean vents.\nStep 3: Place in cool area.\nStep 4: Avoid overloading.\nStep 5: Turn back on."],
+
+["Internet access blocked","Check security settings.","Step 1: Check firewall.\nStep 2: Verify parental controls.\nStep 3: Check router restrictions.\nStep 4: Remove blocks.\nStep 5: Test connection."],
+
+["Poor network performance","Optimize network setup.","Step 1: Restart router.\nStep 2: Close unused apps.\nStep 3: Check bandwidth usage.\nStep 4: Upgrade plan if needed.\nStep 5: Test speed."],
+
+["Network equipment damaged","Repair or replace equipment.","Step 1: Inspect equipment.\nStep 2: Check physical damage.\nStep 3: Test on another system.\nStep 4: Repair or replace.\nStep 5: Reconfigure network."],
+
+["Proxy server not responding",
+"Check proxy settings or disable proxy connection.",
+"Step 1: Open Internet Settings\nStep 2: Go to Proxy settings\nStep 3: Disable incorrect proxy\nStep 4: Save changes\nStep 5: Restart browser or network connection"],
+
+["VPN connection failed",
+"Check VPN configuration and credentials.",
+"Step 1: Open VPN application\nStep 2: Verify login details\nStep 3: Check internet connection\nStep 4: Reconnect VPN\nStep 5: Restart device if needed"],
+
+["DHCP not assigning IP address",
+"Restart router or enable automatic IP assignment.",
+"Step 1: Open network adapter settings\nStep 2: Enable automatic IP (DHCP)\nStep 3: Restart router\nStep 4: Renew IP address\nStep 5: Reconnect to network"],
+
+["Network loop detected",
+"Check and remove duplicate cable connections.",
+"Step 1: Inspect network cables\nStep 2: Remove duplicate connections\nStep 3: Restart switch\nStep 4: Check network topology\nStep 5: Test connection stability"],
+
+["Switch port blocked",
+"Enable or reconfigure switch port settings.",
+"Step 1: Access switch admin panel\nStep 2: Check blocked ports\nStep 3: Enable required port\nStep 4: Save configuration\nStep 5: Test connection"],
+
+["Duplicate MAC address detected",
+"Change MAC address or remove conflicting device.",
+"Step 1: Identify conflicting devices\nStep 2: Disconnect duplicate device\nStep 3: Restart router\nStep 4: Release and renew IP\nStep 5: Check network stability"],
+
+["High packet loss",
+"Check network stability and reduce congestion.",
+"Step 1: Run network diagnostic tool\nStep 2: Check cable connections\nStep 3: Reduce connected devices\nStep 4: Restart router\nStep 5: Test connection quality"],
+
+["Network latency spikes",
+"Optimize network usage and reduce traffic load.",
+"Step 1: Close heavy internet apps\nStep 2: Check background downloads\nStep 3: Restart router\nStep 4: Use wired connection\nStep 5: Test latency"],
+
+["Network card not recognized",
+"Reinstall or update network adapter driver.",
+"Step 1: Open Device Manager\nStep 2: Check network adapters\nStep 3: Enable hidden devices\nStep 4: Update driver\nStep 5: Restart computer"],
+
+["BIOS network disabled",
+"Enable network device in BIOS settings.",
+"Step 1: Restart computer\nStep 2: Enter BIOS setup\nStep 3: Find onboard LAN settings\nStep 4: Enable network device\nStep 5: Save and exit BIOS"],
+
+["Ethernet port failure",
+"Test port and replace if damaged.",
+"Step 1: Try another LAN cable\nStep 2: Test different port\nStep 3: Check physical damage\nStep 4: Restart system\nStep 5: Replace motherboard or port"],
+
+["Wireless adapter driver crash",
+"Reinstall wireless adapter driver.",
+"Step 1: Open Device Manager\nStep 2: Locate wireless adapter\nStep 3: Uninstall driver\nStep 4: Restart computer\nStep 5: Install updated driver"],
+
+["Router firmware update failed",
+"Retry update or reset router.",
+"Step 1: Check internet connection\nStep 2: Restart router\nStep 3: Re-download firmware\nStep 4: Retry update\nStep 5: Reset router if needed"],
+
+["SSID not broadcasting",
+"Enable WiFi broadcast settings.",
+"Step 1: Access router settings\nStep 2: Check SSID broadcast option\nStep 3: Enable SSID visibility\nStep 4: Save settings\nStep 5: Restart router"],
+
+["Captive portal login failure",
+"Reconnect and clear browser cache.",
+"Step 1: Forget network\nStep 2: Reconnect WiFi\nStep 3: Open browser login page\nStep 4: Clear cache\nStep 5: Login again"],
+
+["Network credentials expired",
+"Update saved login credentials.",
+"Step 1: Open network settings\nStep 2: Remove saved credentials\nStep 3: Re-enter username/password\nStep 4: Save settings\nStep 5: Reconnect network"],
+
+["Domain not reachable",
+"Check DNS and domain configuration.",
+"Step 1: Verify internet connection\nStep 2: Ping domain\nStep 3: Flush DNS cache\nStep 4: Restart router\nStep 5: Try again"],
+
+["Active Directory login failure",
+"Check domain credentials and server connection.",
+"Step 1: Verify username/password\nStep 2: Check server connection\nStep 3: Restart computer\nStep 4: Rejoin domain if needed\nStep 5: Try login again"],
+
+["Shared drive sync error",
+"Reconnect network drive and refresh sync.",
+"Step 1: Check network connection\nStep 2: Disconnect shared drive\nStep 3: Re-map drive\nStep 4: Restart system\nStep 5: Test file access"],
+
+["NAS storage unreachable",
+"Check NAS power and network connection.",
+"Step 1: Verify NAS power status\nStep 2: Check LAN connection\nStep 3: Restart NAS device\nStep 4: Ping NAS IP\nStep 5: Reconnect storage"],
+
+["Cloud sync failure",
+"Check internet and account login.",
+"Step 1: Check internet connection\nStep 2: Log out and log in again\nStep 3: Restart sync app\nStep 4: Clear cache\nStep 5: Retry sync"],
+
+["Bandwidth throttling detected",
+"Check ISP limits and reduce usage.",
+"Step 1: Stop heavy downloads\nStep 2: Check ISP plan\nStep 3: Disconnect extra devices\nStep 4: Restart router\nStep 5: Test speed"],
+
+["QoS misconfiguration",
+"Adjust router Quality of Service settings.",
+"Step 1: Open router settings\nStep 2: Go to QoS section\nStep 3: Adjust priority rules\nStep 4: Save configuration\nStep 5: Restart router"],
+
+["IPv6 connectivity issue",
+"Disable or configure IPv6 properly.",
+"Step 1: Open network settings\nStep 2: Locate IPv6 option\nStep 3: Disable or configure correctly\nStep 4: Restart connection\nStep 5: Test internet"],
+
+["ARP cache problem",
+"Clear ARP cache and restart network.",
+"Step 1: Open Command Prompt\nStep 2: Type arp -d *\nStep 3: Restart router\nStep 4: Renew IP\nStep 5: Test connection"],
+
+["DNS cache corruption",
+"Flush DNS cache and restart network.",
+"Step 1: Open Command Prompt\nStep 2: Type ipconfig /flushdns\nStep 3: Restart browser\nStep 4: Restart router\nStep 5: Test website access"],
+
+["Gateway unreachable ping failure",
+"Check router and network configuration.",
+"Step 1: Check router power\nStep 2: Verify gateway IP\nStep 3: Restart router\nStep 4: Renew IP\nStep 5: Test ping again"],
+
+["Routing table error",
+"Reset network configuration.",
+"Step 1: Open Command Prompt\nStep 2: Reset network settings\nStep 3: Restart computer\nStep 4: Reconnect network\nStep 5: Test connection"],
+
+["Loopback test failure",
+"Check network adapter functionality.",
+"Step 1: Open Command Prompt\nStep 2: Run ping 127.0.0.1\nStep 3: Check network adapter\nStep 4: Restart device\nStep 5: Replace adapter if needed"],
+
+["Network time sync error",
+"Enable automatic time synchronization.",
+"Step 1: Open date/time settings\nStep 2: Enable automatic sync\nStep 3: Select correct time server\nStep 4: Restart system\nStep 5: Verify correct time"],
+
+["Certificate authentication failure",
+"Update system certificates.",
+"Step 1: Check system date/time\nStep 2: Update browser/system certificates\nStep 3: Restart browser\nStep 4: Clear cache\nStep 5: Try again"],
+
+["SSL handshake failure",
+"Check security settings and update browser.",
+"Step 1: Update browser\nStep 2: Check system date\nStep 3: Disable old TLS versions\nStep 4: Restart browser\nStep 5: Retry connection"],
+
+["Proxy authentication required error",
+"Enter correct proxy credentials.",
+"Step 1: Open proxy settings\nStep 2: Enter username/password\nStep 3: Save settings\nStep 4: Restart browser\nStep 5: Test connection"],
+
+["Firewall blocking local network",
+"Allow LAN traffic in firewall settings.",
+"Step 1: Open firewall settings\nStep 2: Allow local network access\nStep 3: Disable blocking rules\nStep 4: Save settings\nStep 5: Test LAN connection"],
+
+["Switch VLAN misconfiguration",
+"Correct VLAN settings in switch.",
+"Step 1: Access switch settings\nStep 2: Check VLAN configuration\nStep 3: Assign correct VLAN\nStep 4: Save settings\nStep 5: Restart switch"],
+
+["PoE device not powering",
+"Check PoE switch and cable.",
+"Step 1: Check PoE switch status\nStep 2: Inspect LAN cable\nStep 3: Try another port\nStep 4: Restart switch\nStep 5: Replace device if needed"],
+
+["UPS backup failure affecting network",
+"Check UPS battery and power output.",
+"Step 1: Check UPS power status\nStep 2: Test battery health\nStep 3: Restart UPS\nStep 4: Connect devices directly\nStep 5: Replace UPS if needed"],
+
+["Overloaded switch ports",
+"Redistribute network connections.",
+"Step 1: Check connected devices\nStep 2: Disconnect unnecessary devices\nStep 3: Use additional switch\nStep 4: Restart network\nStep 5: Test stability"],
+
+["Wireless channel congestion",
+"Change WiFi channel settings.",
+"Step 1: Open router settings\nStep 2: Go to wireless channel settings\nStep 3: Select less congested channel\nStep 4: Save settings\nStep 5: Restart router"],
+
+["Bluetooth interference affecting WiFi",
+"Reduce nearby wireless interference.",
+"Step 1: Turn off nearby Bluetooth devices\nStep 2: Move router away from devices\nStep 3: Change WiFi frequency band\nStep 4: Restart router\nStep 5: Test signal"],
+
+["Rogue DHCP server detected",
+"Disable unauthorized DHCP device.",
+"Step 1: Identify unknown DHCP source\nStep 2: Disconnect suspicious device\nStep 3: Access router settings\nStep 4: Disable rogue DHCP\nStep 5: Restart network"],
+
+["Unauthorized remote access attempt",
+"Secure network and change credentials.",
+"Step 1: Check router logs\nStep 2: Disconnect unknown sessions\nStep 3: Change admin password\nStep 4: Enable firewall\nStep 5: Restart router"],
+
+["VPN split tunneling issue",
+"Adjust VPN configuration settings.",
+"Step 1: Open VPN settings\nStep 2: Check split tunneling option\nStep 3: Disable or configure properly\nStep 4: Restart VPN\nStep 5: Test connection"],
+
+["Bandwidth allocation error",
+"Reconfigure bandwidth distribution.",
+"Step 1: Open router QoS settings\nStep 2: Adjust bandwidth limits\nStep 3: Save configuration\nStep 4: Restart router\nStep 5: Test performance"],
+
+["Router admin login failure",
+"Reset router credentials.",
+"Step 1: Check default login details\nStep 2: Try reset button on router\nStep 3: Restore factory settings\nStep 4: Reconfigure router\nStep 5: Set new password"],
+
+["ISP DNS outage fallback required",
+"Switch to public DNS servers.",
+"Step 1: Open network settings\nStep 2: Change DNS to 8.8.8.8 or 1.1.1.1\nStep 3: Save settings\nStep 4: Restart connection\nStep 5: Test internet"],
+
+["Modem synchronization failure",
+"Restart modem and check ISP line.",
+"Step 1: Turn off modem\nStep 2: Wait 30 seconds\nStep 3: Turn on modem\nStep 4: Check signal lights\nStep 5: Contact ISP if needed"],
+
+["Fiber optic signal loss",
+"Check fiber cable and ISP line.",
+"Step 1: Inspect fiber cable\nStep 2: Ensure proper connection\nStep 3: Restart modem\nStep 4: Check signal strength\nStep 5: Contact provider"],
+
+["Ethernet duplex mismatch",
+"Match network speed settings.",
+"Step 1: Open network adapter settings\nStep 2: Set speed to auto\nStep 3: Restart device\nStep 4: Check switch settings\nStep 5: Test connection"],
+
+["Network interface flapping",
+"Check unstable network adapter.",
+"Step 1: Open Device Manager\nStep 2: Check adapter status\nStep 3: Update driver\nStep 4: Disable/enable adapter\nStep 5: Restart system"],
+
+["IPv4 address exhaustion",
+"Release and renew IP addresses.",
+"Step 1: Open Command Prompt\nStep 2: Type ipconfig /release\nStep 3: Type ipconfig /renew\nStep 4: Restart router\nStep 5: Test connection"],
+
+["MAC address filtering blocked connection",
+"Add device MAC address to allowed list in router settings.",
+"Step 1: Open router admin panel\nStep 2: Go to Security or MAC Filtering section\nStep 3: Check if device is blocked\nStep 4: Add device MAC address to allowed list\nStep 5: Save settings and reconnect to network"]
+
+];
+
+// render function
+function renderProblems(list){
+    let container = document.getElementById("content");
+    container.innerHTML = "";
+
+    list.forEach((p, index) => {
+        container.innerHTML += `
+        <div class="problem" onclick="toggleSolution(${index})">
+            <h3>${p[0]}</h3>
+
+            <div class="solution" id="sol-${index}">
+                <p><b>Solution:</b> ${p[1]}</p>
+                <div class="tutorial">${p[2].replace(/\n/g,"<br>")}</div>
+            </div>
+        </div>
+        `;
+    });
+}
+
+// toggle solution open/close
+function toggleSolution(index){
+    let sol = document.getElementById("sol-" + index);
+    sol.style.display = (sol.style.display === "block") ? "none" : "block";
+}
+
+// SEARCH FUNCTION (THIS IS WHAT YOU WERE MISSING)
+function searchProblem(){
+    let input = document.getElementById("searchBar").value.toLowerCase();
+
+    let filtered = softwareProblems.filter(p =>
+        p[0].toLowerCase().includes(input) ||
+        p[1].toLowerCase().includes(input)
+    );
+
+    renderProblems(filtered);
+}
+
+// initial load
+renderProblems(networkProblems);
+
+function displayProblems(list){
+    let output="";
+
+
+list.forEach((item,index)=>{
+
+
+let tutorialSteps = item[2]
+.split("\n")
+.map(step=>{
+
+return "<p>" + step + "</p>";
+
+})
+.join("");
+
+
+
+output += `
+        <div class="problem" onclick="showSolution(${index})">
+            <h3>${index+1}. ${item[0]}</h3>
+
+            <div class="solution" id="solution-${index}">
+                <p><b>Solution:</b><br>${item[1]}</p>
+
+                <div class="separator"></div>
+
+                <p class="tutorial">
+                    <b>Tutorial:</b><br>
+                    ${tutorialSteps}
+                </p>
+            </div>
+        </div>
+        `;
+    });
+
+    document.getElementById("content").innerHTML = output;
+}
+
+function showSolution(id){
+    let box = document.getElementById("solution-"+id);
+    box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+function searchProblem(){
+    let search = document.getElementById("searchBar").value.toLowerCase();
+
+    let filtered = networkProblems.filter(p =>
+        p[0].toLowerCase().includes(search)
+    );
+
+    displayProblems(filtered);
+}
+
+displayProblems(networkProblems);
+
+</script>
+
+</body>
+</html>
