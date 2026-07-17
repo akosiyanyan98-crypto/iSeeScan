@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>iSeeScan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(rgba(0,80,255,.5), rgba(0,20,80,.9)),
+                        url("https://images.unsplash.com/photo-1518770660439-4636190af475");
+            background-size: cover;
+            background-attachment: fixed;
+            color: white;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 60px;
+            color: #00eaff;
+            text-shadow: 0 0 20px cyan;
+        }
+
+        .logo {
+            font-size: 55px;
+            filter: drop-shadow(0 0 10px cyan);
+        }
+
+        .categories {
+            width: 90%;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        
+        .card {
+            background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(0,170,255,.08));
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0,234,255,.35);
+            padding: 50px 30px;
+            border-radius: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: .4s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,.35), inset 0 0 20px rgba(0,234,255,.1);
+        }
+
+        .card h2 {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #ffffff;
+            text-shadow: 0 0 8px #00eaff, 0 0 15px rgba(0,234,255,.7);
+            transition: .3s;
+        }
+
+        .card p {
+            font-family: 'Trebuchet MS', sans-serif;
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 1.6;
+            letter-spacing: .5px;
+            color: #e5faff;
+        }
+
+        .card:nth-child(1) h2 { color: #00eaff; }
+        .card:nth-child(2) h2 { color: #00ff9d; }
+        .card:nth-child(3) h2 { color: #ffd700; }
+        .card:nth-child(4) h2 { color: #ff6bff; }
+
+        .card:hover h2 { transform: scale(1.05); }
+        .card:hover p { color: white; }
+
+        
+        .motherboard-section {
+            width: 90%;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        .motherboard-section h2 {
+            font-size: 35px;
+            color: #00eaff;
+            text-shadow: 0 0 15px cyan;
+        }
+
+        .motherboard-container {
+            position: relative;
+            width: 90%;
+            margin: auto;
+        }
+
+        .motherboard-image {
+            width: 100%;
+            display: block;
+            border-radius: 20px;
+            box-shadow: 0 0 30px cyan;
+        }
+
+        
+        .part {
+            position: absolute;
+            cursor: pointer;
+            opacity: 0.3;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 10px rgba(0, 234, 255, 0.5);
+        }
+
+        .part:hover {
+            transform: scale(1.01);
+            opacity: 0.65;
+            box-shadow: 0 0 20px cyan;
+        }
+
+        .io_ports { top: 2%; left: 6%; width: 10%; height: 55%; background-color: lightblue; }
+        .cpu_socket { top: 15%; left: 43%; width: 17%; height: 33%; background-color: gold; }
+        .vrm_power_stages { top: 9%; left: 31%; width: 11%; height: 35%; background-color: orange; }
+        .ram_slots { top: 1%; left: 67%; width: 12%; height: 59%; background-color: green; }
+        .atx_power { top: 17%; left: 85%; width: 4%; height: 27%; background-color: yellow; }
+        .primary_gpu_slot { top: 59%; left: 21%; width: 35%; height: 6%; background-color: red; }
+        .chipset_heatsink { top: 62%; left: 61%; width: 13%; height: 22%; background-color: darkblue; }
+        .sata_ports { top: 54%; left: 83%; width: 6%; height: 29%; background-color: purple; }
+        .bios_cmos_battery { top: 67%; left: 11%; width: 8%; height: 12%; background-color: #ff6bff; }
+        .front_panel_header { top: 88%; left: 42%; width: 28%; height: 4%; background-color: cyan; }
+        .cpu_power_6pin { top: 2%; left: 23%; width: 6%; height: 6%; background-color: #ff3340; }
+        .cpu_fan_header { top: 4%; left: 59%; width: 5%; height: 5%; background-color: #33ff33; }
+        .pcie_x1_slots { top: 67%; left: 21%; width: 10%; height: 25%; background-color: #ffff33; }
+        .front_audio_header { top: 86%; left: 13%; width: 6%; height: 7%; background-color: #ff33ff; }
+        .sys_fan_bottom { top: 88%; left: 30%; width: 10%; height: 5%; background-color: #33ffff; }
+        .front_usb3_header { top: 87%; left: 76%; width: 10%; height: 6%; background-color: #ffaae0; }
+        .front_usb_c_header { top: 44%; left: 86%; width: 3%; height: 8%; background-color: #ff00ae; }
+
+        
+        #partInfo {
+            margin-top: 20px;
+            padding: 25px;
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 234, 255, 0.2);
+            border-radius: 20px;
+            color: white;
+            text-align: left;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #partInfo h3 {
+            color: #00eaff;
+            margin-top: 0;
+            font-size: 24px;
+            border-bottom: 2px solid rgba(0, 234, 255, 0.3);
+            padding-bottom: 8px;
+        }
+
+        .component-list {
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .component-item {
+            background: rgba(0, 234, 255, 0.1);
+            border-left: 4px solid #00eaff;
+            padding: 12px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .component-item stroke {
+            display: block;
+            font-weight: bold;
+            color: #00ff9d;
+            margin-bottom: 4px;
+        }
+
+        .problem {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            margin: 10px auto;
+            border-radius: 10px;
+            text-align: left;
+            width: 90%;
+        }
+
+        .component-img {
+            display: block;
+            width: 100%;
+            max-width: 150px;
+            height: auto;
+            margin-top: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 234, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 234, 255, 0.2);
+            cursor: zoom-in;
+            transition: transform 0.2s;
+        }
+
+        .component-img:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2 id="welcome"></h2>
+        <h1><span class="logo">🔍</span> iSeeScan</h1>
+        <p>School Computer Laboratory Troubleshooting System</p>
+    </header>
+
+    <div class="categories">
+        <a href="software.html" style="text-decoration:none;color:white;">
+            <div class="card">
+                <h2>Software Problems</h2>
+                <p>Issues with the operating system, programs, or settings</p>
+            </div>
+        </a>
+        <a href="hardware.html" style="text-decoration:none;color:white;">
+            <div class="card">
+                <h2>Hardware Problems</h2>
+                <p>Physical parts that are outdated, damaged, or failing</p>
+            </div>
+        </a>
+        <a href="user.html" style="text-decoration:none;color:white;">
+            <div class="card">
+                <h2>User Related Problems</h2>
+                <p>Problems caused by how students/teachers use the PC</p>
+            </div>
+        </a>
+        <a href="network.html" style="text-decoration:none;color:white;">
+            <div class="card">
+                <h2>Network & Maintenance</h2>
+                <p>Issues from lack of upkeep or connectivity</p>
+            </div>
+        </a>
+        <a href="report_page.html" style="text-decoration:none;color:white;">
+            <div class="card">
+                <h2>Reporting Page</h2>
+                <p>Report hardware or software system failures for instant AI diagnosis</p>
+            </div>
+        </a>
+    </div>
+
+    <section class="motherboard-section">
+        <h2>🖥️ Motherboard Parts Guide</h2>
+        <p>Click the highlighted visual blocks to learn what components plug into them.</p>
+
+        <div class="motherboard-container">
+            <img src="motherboard.png" class="motherboard-image" alt="Motherboard Layout">
+
+            <div class="part io_ports" onclick="showPart('I/O Ports')"></div>
+            <div class="part cpu_socket" onclick="showPart('CPU Socket')"></div>
+            <div class="part vrm_power_stages" onclick="showPart('VRM Power Stages')"></div>
+            <div class="part ram_slots" onclick="showPart('RAM Slots')"></div>
+            <div class="part atx_power" onclick="showPart('24-Pin ATX Power Connector')"></div>
+            <div class="part primary_gpu_slot" onclick="showPart('Primary GPU PCIe Slot')"></div>
+            <div class="part chipset_heatsink" onclick="showPart('Chipset Heatsink')"></div>
+            <div class="part sata_ports" onclick="showPart('SATA Ports')"></div>
+            <div class="part bios_cmos_battery" onclick="showPart('CMOS Battery')"></div>
+            <div class="part front_panel_header" onclick="showPart('Front Panel Headers')"></div>
+
+            <div class="part cpu_power_6pin" onclick="showPart('6-Pin CPU Power Connector')"></div>
+            <div class="part cpu_fan_header" onclick="showPart('CPU Fan Header')"></div>
+            <div class="part pcie_x1_slots" onclick="showPart('PCIe x1 Expansion Slots')"></div>
+            <div class="part front_audio_header" onclick="showPart('Front Panel Audio Header')"></div>
+            <div class="part sys_fan_bottom" onclick="showPart('System Fan Header')"></div>
+            
+            <div class="part front_usb3_header" onclick="showPart('Front Panel USB 3.0 Header')"></div>
+            <div class="part front_usb_c_header" onclick="showPart('Front Panel USB Type-C Header')"></div>
+        </div>
+
+        <div id="partInfo">
+            <h3>Interactive Guide</h3>
+            <p style="font-weight: bold; color: #00eaff; margin-bottom: 5px;">What is a Motherboard?</p>
+<p style="margin-top: 0; color: #e5faff; font-size: 16px; line-height: 1.5;">The motherboard is the main printed circuit board (PCB) inside a computer. It serves as the central hub that connects and allows communication between the CPU, RAM, storage drives, graphics cards, and all other physical internal or external peripherals.</p>
+<hr style="border: 0; border-top: 1px solid rgba(0, 234, 255, 0.2); margin: 15px 0;">
+            <p>Click a highlighted motherboard zone to view its details and see what components connect there.</p>
+        </div>
+    </section>
+
+    <div id="content"></div>
+
+    <script>
+        function zoomImage(imgElement) {
+            let modal = document.getElementById("imageModal");
+            let modalImg = document.getElementById("modalImg");
+            
+            modalImg.src = imgElement.src;   
+            modal.style.display = "flex";    
+        }
+
+        let user = localStorage.getItem("userNickname") || "Guest";
+        document.getElementById("welcome").innerHTML = "Welcome, " + user + "!";
+
+        function showPart(part) {
+            let info = "";
+            let componentsHTML = "";
+        // Track the last clicked part
+        if (typeof currentSelectedPart === 'undefined') {
+            window.currentSelectedPart = "";
+        }
+
+        // If clicked again, reset to the motherboard definition
+        if (window.currentSelectedPart === part) {
+            window.currentSelectedPart = ""; // Clear track
+            document.getElementById("partInfo").innerHTML = `
+                <h3>Interactive Guide</h3>
+                <p style="font-weight: bold; color: #00eaff; margin-bottom: 5px;">What is a Motherboard?</p>
+                <p style="margin-top: 0; color: #e5faff; font-size: 16px; line-height: 1.5;">The motherboard is the main printed circuit board (PCB) inside a computer. It serves as the central hub that connects and allows communication between the CPU, RAM, storage drives, graphics cards, and all other physical internal or external peripherals.</p>
+                <hr style="border: 0; border-top: 1px solid rgba(0, 234, 255, 0.2); margin: 15px 0;">
+                <p>Click a highlighted motherboard zone to view its details and see what components connect there.</p>`;
+            return; // Stop the function here
+        }
+        window.currentSelectedPart = part; // Update track
+
+            if (part == "CPU Socket") {
+                info = "The central structural socket that connects the processor chip to the motherboard system.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>Processor (CPU)</stroke> The main brain of the computer (e.g., Intel Core i5/i7 or AMD Ryzen).
+                        <img src="images/cpu.png" class="component-img" alt="CPU" onclick="zoomImage(this)">
+                    </div>
+                        
+                    <div class="component-item">
+                        <stroke>Thermal Paste</stroke> Compound applied to top of CPU to transfer heat efficiently.
+                        <img src="images/thermalpaste.png" class="component-img" alt="Thermal Paste" onclick="zoomImage(this)">
+                    </div>
+
+                    <div class="component-item">
+                        <stroke>CPU Cooler / Heatsink</stroke> Mounted directly over the socket to prevent CPU overheating.
+                        <img src="images/cpu_cooler.png" class="component-img" alt="CPU Cooler" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "RAM Slots") {
+                info = "Memory slots designed to hold high-speed temporary system execution data sticks.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>DDR4 / DDR5 RAM Sticks</stroke> 
+                        Desktop random-access memory modules (DIMMs) to support active system applications.
+                        <img src="images/ram.png" class="component-img" alt="RAM Stick" onclick="zoomImage(this)">
+                        <img src="images/ddr4&ddr5.png" class="component-img" alt="DDR4 and DDR5 Comparison" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "Primary GPU PCIe Slot") {
+                info = "High-speed PCIe x16 expansion channel meant for heavy processing hardware interfaces.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>Dedicated Graphics Card (GPU)</stroke> Hardware used to process display visuals, 3D modeling, or gaming.
+                        <img src="images/Dedicated_Graphics_Card.png" class="component-img" alt="Graphics Card" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "24-Pin ATX Power Connector") {
+                info = "The primary power distribution input portal running directly from the system power supply unit.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>24-Pin ATX Cable</stroke> The main power distribution cable bundle coming straight out from the Power Supply Unit (PSU).
+                        <img src="images/atx_cable.png" class="component-img" alt="ATX 24-pin Cable" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "SATA Ports") {
+                info = "Data channel ports linking storage media directly into the system data architecture.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>SATA SSD</stroke> 2.5-inch solid-state high-speed storage drives.
+                        <img src="images/sata_ssd.png" class="component-img" alt="SATA SSD" onclick="zoomImage(this)">
+                    </div>
+                    
+                    <div class="component-item">
+                        <stroke>Hard Disk Drive (HDD)</stroke> Large, mechanical spinning magnetic platter storage drives.
+                        <img src="images/hdd.png" class="component-img" alt="HARD DISK DRIVE" onclick="zoomImage(this)">
+                    </div>
+
+                    <div class="component-item">
+                        <stroke>SATA Data Cable</stroke> Cable interface that links those storage drives right back into these ports.
+                        <img src="images/sata_cable.png" class="component-img" alt="SATA DATA CABLE" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "CMOS Battery") {
+                info = "Small cell power node maintaining baseline firmware tracking rules when main power drops.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>CR2032 Lithium Cell</stroke> Simple 3V coin battery unit providing volatile configuration power backups.
+                        <img src="images/cmos_battery.png" class="component-img" alt="CMOS Battery" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "I/O Ports") {
+                info = "The Rear Input/Output panel connects all external hardware peripherals and networking lines directly to the system bus.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>USB 2.0 Ports (Black)</stroke> 
+                        Low-latency connections for input devices like <b>Mice, Keyboards, and Printers</b>.
+                        <img src="images/usb_2.0.png" class="component-img" alt="USB 2.0 Ports" onclick="zoomImage(this)">
+                    </div>
+                    <div class="component-item">
+                        <stroke>USB 3.0 Ports (Blue)</stroke> 
+                        High-speed data channels for <b>External SSDs, Flash Drives, and HD Webcams</b>.
+                        <img src="images/usb_3.0.png" class="component-img" alt="USB 3.0 Ports" onclick="zoomImage(this)">
+                    </div>
+                    <div class="component-item">
+                        <stroke>RJ-45 Ethernet Port</stroke> 
+                        Local area network line interface where the <b>LAN / Network Cable</b> snaps in for internet access.
+                        <img src="images/rj45_ethernet.png" class="component-img" alt="RJ-45 Ethernet Port" onclick="zoomImage(this)">
+                    </div>
+                    <div class="component-item">
+                        <stroke>Audio Input Jacks</stroke> 
+                        Analog sound channels: <b>Pink</b> jack handles microphone inputs; <b>Blue</b> jack handles line-in audio equipment.
+                        <img src="images/audio_input.png" class="component-img" alt="Audio Input Jacks" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "Front Panel Headers") {
+                info = "Pins matching internal structural lines built directly onto the physical PC system chassis.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>Chassis Connectors</stroke> Power Button cables, Reset Button lines, Case LEDs, and front Audio/USB wiring.
+                        <img src="images/chassis_connectors.png" class="component-img" alt="Chassis Connectors" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "VRM Power Stages") {
+                info = "Voltage management phases filtering baseline system current directly onto the processor lines.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>VRM Heatsink Blocks</stroke> Thermal metal plates covering power phases to draw away high power operating heat.
+                        <img src="images/vrm_power_stages.png" class="component-img" alt="VRM Heatsink Blocks" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "Chipset Heatsink") {
+                info = "Thermal dissipation cover handling secondary baseline logic board processing grids.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>Motherboard Chipset</stroke> System controller managing interactions between PCIe lanes, SATA channels, and USB data arrays.
+                        <img src="images/chipset.png" class="component-img" alt="CHIPSET" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "6-Pin CPU Power Connector") {
+                info = "Dedicated power delivery input channel supplying clean 12V voltage directly to the CPU voltage regulator modules (VRMs).";
+                componentsHTML = `
+                    <div class="component-item">
+ <stroke>6-Pin to CPU EPS Cable</stroke> The secondary power lead from the Power Supply Unit (PSU) supplying heavy operating current to the processor.
+                        <img src="images/6_pins_cable.png" class="component-img" alt="CPU Power Cable" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "CPU Fan Header") {
+                info = "A dedicated 4-pin PWM power connector that regulates the dynamic cooling speed of your main processor fan based on live thermal output.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>CPU Heatsink Fan Connector</stroke> The main power wire running from the central CPU cooling tower fan or liquid cooling pump.
+                        <img src="images/cpu_fan_connector.png" class="component-img" alt="CPU Fan Connector" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "PCIe x1 Expansion Slots") {
+                info = "Lower-bandwidth auxiliary expansion channels built to attach smaller hardware utility cards.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>Sound Cards</stroke> Dedicated audio processors for high-fidelity recording systems or studio sound outputs.
+                        <img src="images/sounds_card.png" class="component-img" alt="Sound Card" onclick="zoomImage(this)">
+                    </div>
+                    <div class="component-item">
+                        <stroke>Wi-Fi / Bluetooth PCIe Cards</stroke> Wireless expansion network modules fitted with high-gain rear antennas.
+                        <img src="images/wifi_bluetooth_cards.png" class="component-img" alt="Wi-Fi Card" onclick="zoomImage(this)">
+                    </div>
+                    <div class="component-item">
+                        <stroke>PCIe Expansion Cards</stroke> Sound cards, dedicated Wi-Fi capture cards, or high-speed storage expanders.
+                        <img src="images/PCIe_Expansion_Cards.png" class="component-img" alt="PCIe Expansion Cards" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "Front Panel Audio Header") {
+                info = "Internal audio pin array (JAUD1) linking the motherboard sound processor to the headphones/microphone audio ports on the exterior case chassis.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>HD Audio Case Connector</stroke> The internal bundled wiring array running inside the computer case labeled 'HD AUDIO'.
+                        <img src="images/hd_audio_connectors.png" class="component-img" alt="HD Audio Connector" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "System Fan Header") {
+                info = "Auxiliary 3-pin or 4-pin power headers used to route, monitor, and regulate custom internal chassis airflow cooling fans.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>Chassis Cooling Fan</stroke> Case ventilation airflow cooling fans running power from internal system boards.
+                        <img src="images/chassis_cooling_fan.png" class="component-img" alt="Case Fan" onclick="zoomImage(this)">
+                    </div>`;
+            }
+            else if (part == "Front Panel USB 3.0 Header") {
+                info = "An internal high-speed header pin array designed to link motherboard connections straight out to the fast USB 3.0 ports on the front or top interface panel of your PC case casing.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>Front Panel USB 3.0 Internal Cable</stroke> The thick internal bundle cable (frequently stylized with a distinct blue socket tip) running straight out from the external chassis assembly.
+                        <img src="images/usb_3.0_front_panel_connector.png" class="component-img" alt="Front Panel USB 3.0 Cable" onclick="zoomImage(this)">
+                    </div>`;
+            }
+                    else if (part == "Front Panel USB Type-C Header") {
+                info = "A high-speed modern internal interface designed to link the motherboard directly to the reversible USB Type-C port located on the PC case front or top IO panel.";
+                componentsHTML = `
+                    <div class="component-item">
+                        <stroke>Front Panel Type-C Internal Cable</stroke> The specialized ribbon cable coming from the front panel chassis, featuring a distinctive rectangular socket plug.
+                        <img src="images/front_usbc_cable.png" class="component-img" alt="Front Panel USB-C Cable" onclick="zoomImage(this)">
+                    </div>`;
+            }
+
+            
+            document.getElementById("partInfo").innerHTML = `
+                <h3>${part}</h3>
+                <p>${info}</p>
+                <h4 style="color:#00ff9d; margin-top:15px; margin-bottom:5px;">🧩 What Plugs In Here:</h4>
+                <div class="component-list">${componentsHTML}</div>
+            `;
+        }
+
+        let database = {
+            "software": [["OS Freezing", "Run system file checker or re-verify driver software configurations."]],
+            "hardware": [["No POST Screen", "Reseat RAM modules or clear internal CMOS configuration structures."]]
+        };
+        function showProblems(category) {
+            let output = "<h2>" + category.toUpperCase() + " PROBLEMS</h2>";
+            if (database[category]) {
+                database[category].forEach((item, index) => {
+                    output += `
+                    <div class="problem">
+                        <h3>${index + 1}. ${item[0]}</h3>
+                        <p><b>Solution:</b> ${item[1]}</p>
+                    </div>`;
+                });
+            } else {
+                output += "<p>No logged diagnostic entries present for this block category choice.</p>";
+            }
+            document.getElementById("content").innerHTML = output;
+        }
+    </script>
+    
+    <div id="imageModal" style="display:none; position:fixed; z-index:9999; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; cursor:zoom-out;" onclick="this.style.display='none'">
+        <img id="modalImg" style="max-width:90%; max-height:90%; border-radius:10px; box-shadow: 0 0 30px rgba(0,234,255,0.5); border: 2px solid #00eaff;">
+    </div>
+</body>
+</html>
