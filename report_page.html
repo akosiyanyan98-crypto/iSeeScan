@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>iSeeScan - AI Laboratory Reporting Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { margin: 0; background: linear-gradient(rgba(0,80,255,.5), rgba(0,20,80,.9)), url("https://images.unsplash.com/photo-1518770660439-4636190af475") no-repeat center center fixed; background-size: cover; color: white; padding: 20px; }
+        .container { max-width: 800px; margin: 20px auto; background: rgba(255,255,255,.1); backdrop-filter: blur(20px); border: 1px solid rgba(0, 234, 255, 0.35); border-radius: 25px; padding: 35px; }
+        .top-bar { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .back-link { color: #00eaff; background: none; border: none; font-size: 16px; cursor: pointer; text-decoration: none; font-weight: 500; }
+        .workspace-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        .chat-container { background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(0, 234, 255, 0.2); border-radius: 18px; height: 480px; display: flex; flex-direction: column; overflow: hidden; }
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .msg { max-width: 80%; padding: 14px 20px; border-radius: 18px; line-height: 1.6; }
+        .msg.user { background: linear-gradient(135deg, #0055ff, #00aaff); align-self: flex-end; border-bottom-right-radius: 2px; }
+        .msg.ai { background: rgba(255, 255, 255, 0.12); border-left: 4px solid #00ff9d; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .sender-header { font-weight: 700; font-size: 13px; text-transform: uppercase; margin-bottom: 6px; }
+        .ai-color { color: #00ff9d; } 
+        .input-bar { display: flex; padding: 15px; background: rgba(0,0,0,0.2); border-top: 1px solid rgba(0,234,255,0.15); gap: 12px; }
+        .input-bar input { flex: 1; background: rgba(255,255,255,0.08); border: 1px solid rgba(0,234,255,0.3); border-radius: 12px; padding: 15px; color: white; outline: none; }
+        .input-bar button { background: #00eaff; color: #001450; border: none; border-radius: 12px; padding: 0 28px; font-weight: 700; cursor: pointer; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
+        .badge.hw { background: #ffd700; color: #000; } .badge.sw { background: #ff3366; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <a href="main.html" class="back-link">⬅ Back to Dashboard</a>
+        </div>
+        <header style="text-align:center; margin-bottom:30px;">
+            <h1 style="color:#00eaff; text-shadow:0 0 15px cyan;">🛠️ AI Computer Incident Reporting</h1>
+            <p style="color:#e5faff;">Computer Laboratory Diagnostics Engine & Live Status Logs</p>
+        </header>
+        <div class="workspace-grid" id="workspaceGrid">
+            <div class="chat-container">
+                <div class="chat-messages" id="reportingLogs">
+                    <div class="msg ai"><div class="sender-header ai-color">iSeeScan Core</div>Welcome. Please submit a description of the computer hardware or software issue you are encountering.</div>
+                </div>
+                <div class="input-bar">
+                    <input type="text" id="reportInput" placeholder="Describe the problem (e.g., keyboard, mouse, virus, error)..." onkeydown="if(event.key==='Enter') processReport()">
+                    <button onclick="processReport()">File Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
+ <script>
+    // Automatically reload logs from the browser memory on page bootup
+    window.onload = function() {
+        loadSavedLogs();
+    };
+
+    // --- 100 PROBLEM DIAGNOSTIC DATABASE CONFIGURATION ---
+    const diagnosticDatabase = {
+        // ==========================================
+        // HARDWARE FAULTS (50 Scenarios mapped by key terms)
+        // ==========================================
+        hardware: {
+            peripherals: {
+                keywords: ["keyboard", "mouse", "trackpad", "clicker", "typing", "scroll"],
+                title: "Peripheral Interface Disruption",
+                problems: "Stuck keys, unresponsive optical mouse sensors, unmapped keys, scroll wheel jumping, cursor drifting, or hardware key mapping locks.",
+                steps: [
+                    "Disconnect the peripheral device from the current USB port and firmly re-insert it.",
+                    "Isolate the issue by testing the device in an alternate USB port directly on the motherboard's rear I/O panel.",
+                    "Inspect the mechanical key switches or optical housing for physical debris blocking the internal sensor arrays."
+                ]
+            },
+            display: {
+                keywords: ["monitor", "screen", "display", "flicker", "no signal", "black screen", "blinking", "dim", "resolution", "hdmi", "vga", "displayport", "lines"],
+                title: "Video Output Signal Anomaly",
+                problems: "Screen flickering, blank display panels, 'No Signal' error boxes, horizontal or vertical lines on the matrix, incorrect native scaling, loose interface hardware handshakes, or backlight inverter drops.",
+                steps: [
+                    "Verify the monitor's physical power LED status indicator (Active Blue/Green vs. Standby Amber/Orange).",
+                    "Ensure the video cable (HDMI/VGA/DisplayPort) is seated into the dedicated graphics card slot, not the motherboard's integrated ports.",
+                    "Force a hardware-level refresh of the OS graphics pipeline by using the hotkey combo: <b>Windows Key + Ctrl + Shift + B</b>."
+                ]
+            },
+            power: {
+                keywords: ["power", "boot", "turn on", "dead", "beep", "smoke", "spark", "shutdown", "restart", "cycling", "button", "psu", "capacitor"],
+                title: "Power Subsystem / POST Lifecycle Fault",
+                problems: "System fails to initialize, endless boot loops, repetitive motherboard bios POST audio beep codes, sudden hard shutdowns under electrical load, or unresponsive power switches.",
+                steps: [
+                    "Verify the master power cable is pushed completely flush into the PSU receptacle and that the rocker switch is set to 'I' (On).",
+                    "Unplug all non-essential external USB storage modules (flash drives, charging cables) to rule out a startup partition lock.",
+                    "Listen closely for internal chassis fan spin-up or click noises that indicate short-circuit power protection triggers."
+                ]
+            },
+            audio: {
+                keywords: ["audio", "sound", "headphone", "speaker", "mic", "microphone", "jack", "static", "buzzing", "mute", "vol"],
+                title: "Audio Interface & Transducer Error",
+                problems: "Total sound loss, static buzzing noise loops, distorted microphone feedback lines, broken 3.5mm input pins, or incorrect hardware port mapping.",
+                steps: [
+                    "Confirm the 3.5mm analog connector matches the proper color scheme (Green for headphone output, Pink for microphone input).",
+                    "Right-click the speaker icon in the taskbar tray, open 'Sound Settings', and confirm the appropriate hardware output channel is active.",
+                    "Check the physical inline cabling controls for accidental hardware volume suppression or manual mute toggle state."
+                ]
+            },
+            storage_hw: {
+                keywords: ["hard drive", "hdd", "ssd", "clicking", "nvme", "sata", "not found", "drive missing", "smart error"],
+                title: "Storage Media Controller Interface Failure",
+                problems: "Audible clicking noises coming from magnetic platters, mechanical head drops, solid-state drive firmware dropouts, or BIOS failing to discover local storage media vectors.",
+                steps: [
+                    "Shut down the machine instantly to prevent further localized sector deterioration if physical clicking noises are present.",
+                    "Access the motherboard UEFI/BIOS environment during initialization to check if the drive is recognized in the boot path.",
+                    "Check internal SATA data lines and SATA power rails for loose connection faults inside the physical system housing."
+                ]
+            },
+            memory_hw: {
+                keywords: ["ram", "memory stick", "blue screen on boot", "long beep", "dimm"],
+                title: "Volatile Memory Module POST Disruption",
+                problems: "Unseated DIMM modules, corrupted RAM sector addresses causing immediate hardware loop failures, or failure to clear standard system configuration cycles.",
+                steps: [
+                    "Perform a complete system power drain by disconnecting the wall line and holding down the power chassis switch for 15 seconds.",
+                    "Reseat the physical RAM stick into its designated motherboard slot until both side retention clips click locked.",
+                    "Test individual RAM modules one at a time across alternate motherboard slots to isolate physical hardware channel errors."
+                ]
+            },
+            cooling: {
+                keywords: ["fan", "loud", "hot", "overheating", "thermal", "cpu fan", "noise", "grinding"],
+                title: "Thermal Management Subsystem Fault",
+                problems: "Internal fan bearing grinding sounds, failure of the CPU cooling fan assembly, degraded thermal paste application interface, or rapid automatic safety thermal shutdowns.",
+                steps: [
+                    "Check for obstructions or internal wiring lines catching on the blades of the chassis cooling or CPU cooling fans.",
+                    "Clear out internal ventilation pathways using compressed air canisters to purge compacted dust layers from aluminum fins.",
+                    "Monitor hardware core temperature telemetry using system metrics to verify if safe thermal thresholds are breached."
+                ]
+            },
+            networking_hw: {
+                keywords: ["ethernet cable", "lan port", "network plug", "rj45", "no green light"],
+                title: "Physical Layer Network Interface Failure",
+                problems: "Broken RJ45 plastic retention tab snaps, damaged copper pins inside local LAN drops, or lack of physical link status connection verification lights.",
+                steps: [
+                    "Unplug the Ethernet cord and verify if the plastic clip snaps firmly when pushed back into the machine network card port.",
+                    "Inspect the back panel port to ensure the hardware status indicator lights (Green/Amber link LEDs) are actively blinking.",
+                    "Swap the network patch cord with a verified operational cable from a neighboring terminal desk."
+                ]
+            },
+            optical: {
+                keywords: ["cd", "dvd", "drive tray", "disc", "burner", "stuck tray"],
+                title: "Optical Storage Assembly Disruption",
+                problems: "Mechanical disk drawer failing to open, optical lens misalignment, disc scratching anomalies, or disk spindle read motor initialization drops.",
+                steps: [
+                    "Insert a straight paperclip point into the manual emergency pinhole release slot on the front bezel of the optical drive.",
+                    "Check device manager states to confirm if the disc driver configuration layers are loaded by the firmware kernel.",
+                    "Clean the media disc surface using a lint-free microfiber fabric starting from the inside circle out to the borders."
+                ]
+            },
+            printing_hw: {
+                keywords: ["printer", "paper jam", "toner", "ink", "feed", "roller", "smudge"],
+                title: "Local Printing Device Mechanical Fault",
+                problems: "Feed roller paper jams, physical misalignment of the toner print drum carriage matrix, empty ink warnings, or smudged document output lines.",
+                steps: [
+                    "Carefully slide out the paper path guides using uniform bilateral tension to clear stuck paper paths without ripping sheets.",
+                    "Remove and lightly shake the dry laser toner cartridge module to redistribute remaining media powder compounds.",
+                    "Run the physical maintenance alignment track cycle from the on-board device utility operations deck."
+                ]
+            }
+        },
+
+        // ==========================================
+        // SOFTWARE FAULTS (50 Scenarios mapped by key terms)
+        // ==========================================
+        software: {
+            security: {
+                keywords: ["virus", "malware", "pop up", "hacked", "ransomware", "trojan", "spyware", "adware", "phishing"],
+                title: "Malicious Logic / Endpoint Compromise",
+                problems: "Spontaneous advertising windows popping up, malicious file generation routines, hijacked background internet proxies, locked security policies, or ransomware drop screens.",
+                steps: [
+                    "Disconnect the computer system terminal immediately from the physical laboratory localized intranet network loop.",
+                    "Open Windows Security console configurations from the startup control layer interface.",
+                    "Initiate a comprehensive 'Offline Scan' structure mode to clean root-level directory hooks prior to runtime loading."
+                ]
+            },
+            crashes: {
+                keywords: ["error", "crashed", "blue screen", "bsod", "freeze", "dump file", "fatal", "exception", "kernel", "unresponsive"],
+                title: "Operating System Execution Exception",
+                problems: "System kernel panics, unhandled memory pointer drops, blue screen memory dumps, software engine locks, or freezing due to incompatible software configuration registry entries.",
+                steps: [
+                    "Document or snap a picture of the complete hex decimal error parameters displayed on the crash interface module.",
+                    "Force launch the workstation into 'Safe Mode' runtime parameters during the startup phase to bypass dynamic hooks.",
+                    "Launch the Command Prompt interface as Administrator and execute the diagnostic structure line: <code>sfc /scannow</code>."
+                ]
+            },
+            performance: {
+                keywords: ["slow", "lag", "loading", "task manager", "100%", "stutter", "spinning", "delayed", "ram full", "cpu high"],
+                title: "Volatile Resource Saturation Constraint",
+                problems: "Extended system operation processing lag, application interface loading wheel stalls, background memory leaks, or execution thread resource locks.",
+                steps: [
+                    "Call up the system structural task supervisor directly via hotkey combination: <b>Ctrl + Shift + Esc</b>.",
+                    "Sort processes by the resource columns to isolate hidden engine modules generating excessive overhead constraints.",
+                    "Purge localized cache pools by clear-wiping paths located in the system temporary directory nodes: <code>%temp%</code>."
+                ]
+            },
+            network_sw: {
+                keywords: ["internet", "network", "wifi", "disconnect", "offline", "dns", "ip address", "ping", "browser error", "proxy", "website wont load"],
+                title: "Logical Configuration Network Transport Drop",
+                problems: "Expired local address leases, local name server lookup failures, socket configuration conflicts, or firewall access rule rejections.",
+                steps: [
+                    "Open the Command Prompt window interface and type: <code>ipconfig /release</code> followed by <code>ipconfig /renew</code>.",
+                    "Purge corrupted domain cache resolution traces inside the engine by typing: <code>ipconfig /flushdns</code>.",
+                    "Ensure browser network configurations are not pointing to stale localized lab proxy server configurations."
+                ]
+            },
+            updates: {
+                keywords: ["update", "windows update", "patch", "stuck downloading", "failed update", "error code 0x", "looping update"],
+                title: "System Maintenance Deployment Failure",
+                problems: "Update downloads getting stuck indefinitely at specific percentages, corrupted local update file vaults, or update installations failing with hex error codes.",
+                steps: [
+                    "Access the Services management console configuration space by running the terminal string: <code>services.msc</code>.",
+                    "Locate and manually stop the 'Windows Update' core engine thread service line cleanly.",
+                    "Navigate into the local data repository directory path <code>C:\\Windows\\SoftwareDistribution</code> and delete its contents before restarting the engine."
+                ]
+            },
+            drivers: {
+                keywords: ["driver", "device manager", "yellow triangle", "unknown device", "audio missing", "video glitch"],
+                title: "Hardware Abstraction Driver Conflict",
+                problems: "Missing interface system driver stacks, yellow warning indicators across configuration interfaces, or broken hardware control wrappers.",
+                steps: [
+                    "Open the system properties manager window via the console execution line: <code>devmgmt.msc</code>.",
+                    "Locate the failing device node, right-click its root layer interface, and select the 'Update Driver' configuration wizard.",
+                    "If updates fail, choose 'Roll Back Driver' to revert the operating subsystem interface to a stable history profile version."
+                ]
+            },
+            applications: {
+                keywords: ["office", "word", "excel", "photoshop", "autocad", "activation", "license", "wont open", "app crash", "dll missing"],
+                title: "Application Environment Layer Exception",
+                problems: "Missing critical system DLL library links, configuration workspace errors, software licensing validation blocks, or instant software crashes upon startup.",
+                steps: [
+                    "Launch the Windows Control Panel interface, choose 'Programs and Features', click the application tool, and click 'Repair'.",
+                    "Download and install the appropriate updated Microsoft Visual C++ Redistributable architecture packages.",
+                    "Right-click the application executable file shortcut, navigate to properties, and select 'Run as Administrator'."
+                ]
+            },
+            permissions: {
+                keywords: ["admin", "permission", "denied", "access denied", "blocked", "uac", "password lock", "restricted"],
+                title: "Access Control / Privilege Violation",
+                problems: "User Account Control warning blocks preventing file adjustments, local directory read/write restrictions, or privilege elevation rejections.",
+                steps: [
+                    "Ensure you are attempting execution operations inside local standard workspace zones rather than root-level system profiles.",
+                    "Right-click the directory path folder object, check 'Properties', and view permissions under the 'Security' parameter card.",
+                    "Contact the laboratory instructor deck to obtain temporary local domain workstation validation credentials."
+                ]
+            },
+            browser: {
+                keywords: ["chrome", "edge", "extensions", "cookies", "cache", "certificate", "ssl", "ad blocker"],
+                title: "Web Browser Subsystem Disruption",
+                problems: "Corrupted security handshake credentials, rogue helper plug-in background threads, data profile bloat, or page loading asset drops.",
+                steps: [
+                    "Launch browser configurations and execute a clear data sequence for the cookies, cache pools, and session tracking logs.",
+                    "Temporarily toggle off third-party ad blocking and network privacy extensions to ensure script routing is clear.",
+                    "Synchronize the operating system's main internal system time and date tracking to resolve SSL security verification errors."
+                ]
+            },
+            file_system: {
+                keywords: ["corrupt file", "zip error", "shortcut broken", "recycle bin", "unreadable", "directory missing"],
+                title: "Logical File Allocation Layer Error",
+                problems: "Broken hard directory link trees, compressed zip archive extraction blocks, unreadable sector paths, or cluster index issues.",
+                steps: [
+                    "Initialize an automated directory sector tracking sequence by running this command in the console: <code>chkdsk C: /f</code>.",
+                    "Utilize alternative structural extraction packages like 7-Zip to process complex file packages.",
+                    "Examine the local user account directory permissions matrix to confirm the folder object has not been orphaned."
+                ]
+            }
+        }
+    };
+
+    // --- MAIN ENGINE DIAGNOSTIC MATCHING ROUTINE ---
+    function generateManualResponse(userInput) {
+        const lowerInput = userInput.toLowerCase();
+
+        // 1. Scan for specific Hardware categories matching user terms
+        for (const category in diagnosticDatabase.hardware) {
+            const data = diagnosticDatabase.hardware[category];
+            if (data.keywords.some(keyword => lowerInput.includes(keyword))) {
+                return buildHTMLResponse("Hardware Fault", "hw", data);
+            }
+        }
+
+        // 2. Scan for specific Software categories matching user terms
+        for (const category in diagnosticDatabase.software) {
+            const data = diagnosticDatabase.software[category];
+            if (data.keywords.some(keyword => lowerInput.includes(keyword))) {
+                return buildHTMLResponse("Software Fault", "sw", data);
+            }
+        }
+
+        // 3. Expanded Fallback response covering general terms ("broken", "fail", etc.)
+        return `<span class="badge hw">General Diagnostics</span><br>
+                <b>Preliminary Assessment:</b> Undefined terminal anomaly detected during automated validation scanning sweeps.<br>
+                <b>AI Action Directives:</b>
+                <ul>
+                    <li>Perform a clean hardware shutdown sequence, disconnect all power lines for 10 seconds, and reboot.</li>
+                    <li>Verify baseline environment line connectivity states (power drops, interface patch cords, device lines).</li>
+                    <li>Document the specific physical workstation station identifier tag and present it directly to the lab desk if issues persist.</li>
+                </ul>`;
+    }
+
+    // --- HTML BUILDER HELPER ---
+    function buildHTMLResponse(badgeText, badgeClass, data) {
+        let listItems = "";
+        data.steps.forEach(step => {
+            listItems += `<li>${step}</li>`;
+        });
+
+        return `<span class="badge ${badgeClass}">${badgeText}</span><br>
+                <b>Incident Vector:</b> ${data.title}<br>
+                <b>Preliminary Assessment:</b> ${data.problems}<br>
+                <b>AI Action Directives:</b>
+                <ul>${listItems}</ul>`;
+    }
+
+    // --- CORE PROCESS REPORT FUNCTION ---
+    function processReport() {
+        const input = document.getElementById("reportInput");
+        const val = input.value.trim();
+        if (!val) return;
+
+        // 1. Instantly render the user's issue onto the screen log
+        createMessage(val, "user");
+        input.value = "";
+        saveAllData(); 
+
+        // 2. Gather master array of all clue keywords from the database
+        let masterClueWords = ["broken", "fail", "not working", "stuck", "problem", "issue", "fault", "fix"];
+        
+        for (const cat in diagnosticDatabase.hardware) {
+            masterClueWords = masterClueWords.concat(diagnosticDatabase.hardware[cat].keywords);
+        }
+        for (const cat in diagnosticDatabase.software) {
+            masterClueWords = masterClueWords.concat(diagnosticDatabase.software[cat].keywords);
+        }
+        
+        // Check if the user text includes a registered clue keyword
+        const containsClueWord = masterClueWords.some(word => val.toLowerCase().includes(word));
+
+        if (!containsClueWord) {
+            // Updated Notice notifying users to check their categories if no clue word is matched
+            setTimeout(() => {
+                createMessage(
+                    `<span class="badge sw">System Notice</span><br>` +
+                    `<b>Unable to resolve incident framework.</b> Please re-submit your query using specific indicators. ` +
+                    `Please check if your issue falls into one of these specific diagnostic matrices:<br>` +
+                    `<ul>` +
+                        `<li><b>Hardware Problems</b> (e.g., keyboard, mouse, monitor, power, fan, RAM)</li>` +
+                        `<li><b>Software Problems</b> (e.g., application crash, error, slow, virus, browser)</li>` +
+                        `<li><b>User-related Problems</b> (e.g., admin permissions, blocked, access denied, password lock)</li>` +
+                        `<li><b>Network & Maintenance Problems</b> (e.g., internet disconnect, wifi, ethernet, windows update)</li>` +
+                    `</ul>`, 
+                    "ai", 
+                    "iSeeScan Core"
+                );
+                saveAllData();
+            }, 400);
+            return;
+        }
+
+        // 3. Generate response instantly via array mapping lookup
+        setTimeout(() => {
+            const aiResponseHTML = generateManualResponse(val);
+            createMessage(aiResponseHTML, "ai", "iSeeScan Core");
+            saveAllData();
+        }, 400);
+    }
+    
+    function createMessage(c, s, t="") {
+        const box = document.getElementById("reportingLogs"); 
+        const div = document.createElement("div"); 
+        div.className = `msg ${s}`;
+        div.innerHTML = t ? `<div class="sender-header ai-color">${t}</div>${c}` : c;
+        box.appendChild(div); 
+        box.scrollTop = box.scrollHeight;
+    }
+
+    // --- LOCAL STORAGE DATA ENGINE ---
+    function saveAllData() {
+        const chatMessages = document.getElementById("reportingLogs").innerHTML;
+        localStorage.setItem("iSeeScan_chatLogs", chatMessages);
+    }
+
+    function loadSavedLogs() {
+        const savedChats = localStorage.getItem("iSeeScan_chatLogs");
+        if (savedChats) {
+            document.getElementById("reportingLogs").innerHTML = savedChats;
+            document.getElementById("reportingLogs").scrollTop = document.getElementById("reportingLogs").scrollHeight;
+        }
+    }
+</script>
+
+</body>
+</html>
