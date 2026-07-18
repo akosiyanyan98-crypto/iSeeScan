@@ -6,11 +6,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Network & Maintenance - iSeeScan</title>
 
-<div class="back-container">
-    <a href="main.html" class="backBtn">← Back to Categories</a>
-</div>
-
 <style>
+
+/* --- Fix: Stretches the repository image across the viewport --- */
+.background-img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -2;
+}
+
+/* --- Fix: Highly darkened overlay so the motherboard blends in like the main page --- */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(3, 7, 18, 0.97) 20%, rgba(6, 11, 25, 0.92) 100%);
+    z-index: -1;
+}
 
 .separator{
     height:2px;
@@ -20,7 +39,9 @@
 }
 
 .content-wrapper{
-    width:min(95%,1000px);
+    position: relative;
+    z-index: 1;
+    width: min(95%,1000px);
     margin:auto;
 }
 
@@ -28,6 +49,8 @@
     max-width:1000px;
     margin:30px auto;
     text-align:center;
+    position: relative;
+    z-index: 1;
 }
 
 .backBtn{
@@ -77,25 +100,18 @@ body{
     margin:0;
     padding:30px;
     font-family:'Poppins',sans-serif;
-    background:
-    linear-gradient(rgba(0,50,120,.85),rgba(0,10,40,.95)),
-    url("https://images.unsplash.com/photo-1518770660439-4636190af475");
-    background-size:cover;
-    background-attachment:fixed;
     color:white;
 }
 
 h1{
+    position: relative;
+    z-index: 1;
     color:#00eaff;
     text-align:center;
 }
 
 .problem{
-    background:
-    linear-gradient(
-    145deg,
-    rgba(255,255,255,.08),
-    rgba(0,234,255,.05));
+    background: linear-gradient(145deg, rgba(255, 255, 255, .04), rgba(0, 234, 255, .02));
 
     backdrop-filter:blur(15px);
 
@@ -116,7 +132,8 @@ h1{
 
 .problem:hover{
     transform:translateY(-6px);
-    box-shadow:0 15px 35px rgba(0,234,255,.25);
+    background: rgba(36, 59, 85, 0.4);
+    box-shadow:0 15px 35px rgba(0, 234, 255,.25);
 }
 
 .solution{
@@ -134,8 +151,6 @@ h1{
     color:#d6eaff;
     font-size:15px;
 }
-
-
 
 @keyframes slideDown{
 from{opacity:0; transform:translateY(-15px);}
@@ -200,9 +215,16 @@ max-width:700px;
 
 <body>
 
+<!-- Fix: Pulls the repository file dynamically into the HTML layout -->
+<img src="motherboard-background.png" class="background-img" alt="motherboard-background">
+
 <h1>Network & Maintenance Problems</h1>
 
 <div class="content-wrapper">
+
+<div class="back-container">
+    <a href="main.html" class="backBtn">← Back to Categories</a>
+</div>
 
 <input
 type="text"
