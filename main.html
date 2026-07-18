@@ -228,92 +228,69 @@ header p{
         .component-img:hover {
             transform: scale(1.05);
         }
-        
         /* Mobile Layout Configuration */
-        @media screen and (max-width:768px){
+        @media screen and (max-width: 768px) {
+            header { 
+                padding: 20px; 
+            }
+            .categories { 
+                grid-template-columns: 1fr; 
+                width: 95%; 
+            }
+            .card { 
+                padding: 25px; 
+            }
+            .card h2 { 
+                font-size: 24px; 
+            }
+            .card p { 
+                font-size: 15px; 
+            }
+            .motherboard-section { 
+                width: 100%; 
+                padding: 10px; 
+                overflow-x: auto; 
+            }
+            .motherboard-container { 
+                position: relative; 
+                width: 700px; 
+                margin: auto; 
+            }
+            .motherboard-image { 
+                width: 700px; 
+            }
+            #partInfo { 
+                width: 100%; 
+                padding: 18px; 
+            }
+            .component-list { 
+                grid-template-columns: 1fr; 
+            }
+            .component-item { 
+                font-size: 15px; 
+            }
+            .problem { 
+                width: 100%; 
+            }
+            .component-img { 
+                max-width: 100%; 
+            }
+        }
 
-header{
-    padding:20px;
-}
-
-.categories{
-    grid-template-columns:1fr;
-    width:95%;
-}
-
-.card{
-    padding:25px;
-}
-
-.card h2{
-    font-size:24px;
-}
-
-.card p{
-    font-size:15px;
-}
-
-.motherboard-section{
-    width:100%;
-    padding:10px;
-}
-
-#partInfo{
-    width:100%;
-    padding:18px;
-}
-
-.component-list{
-    grid-template-columns:1fr;
-}
-
-.component-item{
-    font-size:15px;
-}
-
-.problem{
-    width:100%;
-}
-
-.component-img{
-    max-width:100%;
-}
-
-@media (max-width:768px){
-
-.motherboard-container{
-    position:relative;
-    width:700px;
-    margin:auto;
-}
-
-.motherboard-section{
-    overflow-x:auto;
-}
-
-.motherboard-image{
-    width:700px;
-}
-
-}
-@media screen and (min-width:1400px){
-
-body{
-    font-size:18px;
-}
-
-.categories{
-    max-width:1500px;
-}
-
-.motherboard-container{
-    max-width:1300px;
-}
-button,
-.card,
-.part{
-    touch-action:manipulation;
-}
+        /* Large Screen Layout Configuration */
+        @media screen and (min-width: 1400px) {
+            body { 
+                font-size: 18px; 
+            }
+            .categories { 
+                max-width: 1500px; 
+            }
+            .motherboard-container { 
+                max-width: 1300px; 
+            }
+            button, .card, .part { 
+                touch-action: manipulation; 
+            }
         }
         
     /* Menu Button Stylings */
