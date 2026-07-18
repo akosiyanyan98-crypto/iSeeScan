@@ -23,6 +23,152 @@
         .input-bar button { background: #00eaff; color: #001450; border: none; border-radius: 12px; padding: 0 28px; font-weight: 700; cursor: pointer; }
         .badge { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
         .badge.hw { background: #ffd700; color: #000; } .badge.sw { background: #ff3366; color: #fff; }
+        
+    /* ==========================================
+   RESPONSIVE DESIGN (Desktop / Tablet / Mobile)
+========================================== */
+
+/* Large Desktop */
+.container{
+    width:100%;
+}
+
+/* Tablet */
+@media (max-width:992px){
+
+    body{
+        padding:15px;
+    }
+
+    .container{
+        padding:25px;
+    }
+
+    .chat-container{
+        height:450px;
+    }
+
+    .msg{
+        max-width:90%;
+    }
+
+    .input-bar input{
+        font-size:15px;
+    }
+
+    .input-bar button{
+        padding:0 20px;
+    }
+
+}
+
+/* Mobile */
+@media (max-width:768px){
+
+    body{
+        padding:10px;
+    }
+
+    .container{
+        width:100%;
+        padding:18px;
+        border-radius:18px;
+    }
+
+    .top-bar{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+
+    header h1{
+        font-size:28px !important;
+    }
+
+    header p{
+        font-size:14px;
+    }
+
+    .chat-container{
+        height:420px;
+    }
+
+    .chat-messages{
+        padding:15px;
+        gap:12px;
+    }
+
+    .msg{
+        max-width:100%;
+        font-size:14px;
+        padding:12px 15px;
+    }
+
+    .input-bar{
+        flex-direction:column;
+        padding:12px;
+        gap:10px;
+    }
+
+    .input-bar input{
+        width:100%;
+        font-size:15px;
+        padding:14px;
+    }
+
+    .input-bar button{
+        width:100%;
+        padding:14px;
+        font-size:15px;
+    }
+
+}
+
+/* Small Phones */
+@media (max-width:480px){
+
+    body{
+        padding:8px;
+    }
+
+    .container{
+        padding:15px;
+    }
+
+    header h1{
+        font-size:22px !important;
+    }
+
+    header p{
+        font-size:13px;
+    }
+
+    .chat-container{
+        height:380px;
+    }
+
+    .chat-messages{
+        padding:12px;
+    }
+
+    .msg{
+        font-size:13px;
+        line-height:1.5;
+    }
+
+    .back-link{
+        font-size:14px;
+    }
+
+    .input-bar input{
+        font-size:14px;
+    }
+
+    .input-bar button{
+        font-size:14px;
+    }
+
+}
     </style>
 </head>
 <body>
@@ -219,7 +365,7 @@
                 title: "Hardware Abstraction Driver Conflict",
                 problems: "Missing interface system driver stacks, yellow warning indicators across configuration interfaces, or broken hardware control wrappers.",
                 steps: [
-                    "Open the system properties manager window via the console execution line: <code>devmgmt.msc</code>.",
+                       "Open the system properties manager window via the console execution line: <code>devmgmt.msc</code>.",
                     "Locate the failing device node, right-click its root layer interface, and select the 'Update Driver' configuration wizard.",
                     "If updates fail, choose 'Roll Back Driver' to revert the operating subsystem interface to a stable history profile version."
                 ]
