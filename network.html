@@ -3,9 +3,12 @@
 
 <head>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Network & Maintenance - iSeeScan</title>
 
-<a href="main.html">← Back to Categories</a>
+<div class="back-container">
+    <a href="main.html" class="backBtn">← Back to Categories</a>
+</div>
 
 <style>
 
@@ -16,19 +19,54 @@
     border-radius:5px;
 }
 
-#searchBar{
-    width:80%;
-    max-width:600px;
-    display:block;
+.content-wrapper{
+    width:min(95%,1000px);
+    margin:auto;
+}
+
+.back-container{
+    max-width:1000px;
     margin:30px auto;
+    text-align:center;
+}
+
+.backBtn{
+    display:block;
+    width:100%;
+    text-align:center;
+    padding:14px;
+    background:#00eaff;
+    color:#111827;
+    text-decoration:none;
+    border-radius:15px;
+    font-weight:bold;
+    box-sizing:border-box;
+    transition:.3s;
+}
+
+.backBtn:hover{
+    background:#fff;
+    transform:translateY(-2px);
+}
+
+#searchBar{
+    width:100%;
     padding:15px 20px;
-    border-radius:25px;
+    margin:25px 0;
     border:none;
+    border-radius:30px;
     outline:none;
-    font-size:18px;
+    font-size:17px;
     background:#1f2937;
     color:white;
-    box-shadow:0 0 15px rgba(0,234,255,.3);
+    box-sizing:border-box;
+    box-shadow:0 0 20px rgba(0,234,255,.35);
+    transition:.3s;
+}
+
+#searchBar:focus{
+    box-shadow:0 0 25px cyan;
+    transform:scale(1.02);
 }
 
 #searchBar::placeholder{
@@ -36,10 +74,15 @@
 }
 
 body{
-    font-family:Arial,sans-serif;
-    background:#111827;
+    margin:0;
+    padding:30px;
+    font-family:'Poppins',sans-serif;
+    background:
+    linear-gradient(rgba(0,50,120,.85),rgba(0,10,40,.95)),
+    url("https://images.unsplash.com/photo-1518770660439-4636190af475");
+    background-size:cover;
+    background-attachment:fixed;
     color:white;
-    padding:40px;
 }
 
 h1{
@@ -48,33 +91,51 @@ h1{
 }
 
 .problem{
-    background:#1f2937;
-    padding:20px;
-    margin:15px 0;
-    border-radius:15px;
+    background:
+    linear-gradient(
+    145deg,
+    rgba(255,255,255,.08),
+    rgba(0,234,255,.05));
+
+    backdrop-filter:blur(15px);
+
+    border:1px solid rgba(0,234,255,.25);
+
+    padding:22px;
+
+    margin:18px auto;
+
+    border-radius:20px;
+
     cursor:pointer;
-    transition:.3s;
+
+    transition:.35s;
+
+    max-width:1000px;
 }
 
 .problem:hover{
-    transform:translateY(-5px);
-    background:#243b55;
+    transform:translateY(-6px);
+    box-shadow:0 15px 35px rgba(0,234,255,.25);
 }
 
 .solution{
     display:none;
-    margin-top:20px;
-    padding:20px;
-    background:#0f172a;
-    border-radius:15px;
-    border-left:5px solid #00eaff;
-    animation:slideDown .4s;
+    margin-top:18px;
+    padding:22px;
+    background:#0b1220;
+    border-left:6px solid cyan;
+    border-radius:18px;
+    animation:slideDown .35s;
 }
 
 .tutorial{
-    line-height:1.8;
-    color:#d1d5db;
+    line-height:2;
+    color:#d6eaff;
+    font-size:15px;
 }
+
+
 
 @keyframes slideDown{
 from{opacity:0; transform:translateY(-15px);}
@@ -86,6 +147,53 @@ a{
     text-decoration:none;
 }
 
+@media(max-width:768px){
+
+body{
+padding:18px;
+}
+
+h1{
+font-size:32px;
+}
+
+#searchBar{
+width:100%;
+font-size:16px;
+padding:13px;
+}
+
+.problem{
+padding:18px;
+}
+
+.solution{
+padding:18px;
+}
+
+.tutorial{
+font-size:14px;
+}
+
+.backBtn{
+width:100%;
+text-align:center;
+}
+
+}
+
+@media(min-width:1200px){
+
+.problem{
+max-width:1100px;
+}
+
+#searchBar{
+max-width:700px;
+}
+
+}
+
 </style>
 
 </head>
@@ -94,17 +202,21 @@ a{
 
 <h1>Network & Maintenance Problems</h1>
 
-<input 
-type="text" 
-id="searchBar" 
+<div class="content-wrapper">
+
+<input
+type="text"
+id="searchBar"
 placeholder="🔍 Search network problem..."
 onkeyup="searchProblem()">
 
 <div id="content"></div>
 
-<br>
+<div class="back-container">
+    <a href="main.html" class="backBtn">← Back to Categories</a>
+</div>
 
-<a href="main.html">← Back to Categories</a>
+</div>
 
 <script>
 
