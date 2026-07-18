@@ -11,15 +11,41 @@
             box-sizing: border-box;
             font-family: 'Poppins', 'Segoe UI', sans-serif;
         }
+        /* Temporary test CSS */
+body {
+    margin: 0;
+    color: white;
+    background: transparent; /* Ensures nothing blocks the image */
+}
 
-        body {
-            margin: 0;
-            background: linear-gradient(rgba(0,80,255,.5), rgba(0,20,80,.9)),
-                        url("https://images.unsplash.com/photo-1518770660439-4636190af475");
-            background-size: cover;
-            background-attachment: fixed;
-            color: white;
-        }
+.background-img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1; /* Simplifies the layers */
+}
+
+/* 2. Applies your midnight gradient overlay directly over the image */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(6, 11, 25, 0.94) 30%, rgba(0, 20, 50, 0.88) 100%);
+    z-index: -1; /* Sits between the image and your text content */
+}
+
+/* 3. Ensures your actual content stays layout-friendly */
+.content {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+}
 
         header {
             text-align: center;
@@ -30,31 +56,25 @@
     font-size:clamp(2rem,6vw,4rem);
 }
 
-.logo{
-    font-size:clamp(2rem,5vw,3.5rem);
-}
-
-header p{
-    font-size:clamp(.9rem,2vw,1.2rem);
-}
-
-        .logo {
+.logo {
             font-size: 55px;
-            filter: drop-shadow(0 0 10px cyan);
+            filter: drop-shadow(0 0 10px#0077ff);
         }
 
         .categories{
-    width:min(95%,1400px);
-    margin:auto;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:25px;
-}
+            width:min(95%,1400px);
+            margin:auto;
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+            gap:25px;
+        }
             
+
         .card {
-            background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(0,170,255,.08));
+            background: rgba(13, 19, 33, 0.8);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(0,234,255,.35);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 234, 255, 0.2);
             padding: clamp(20px,4vw,50px);
             border-radius: 30px;
             text-align: center;
@@ -62,17 +82,22 @@ header p{
             transition: .4s;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,.35), inset 0 0 20px rgba(0,234,255,.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,.6), inset 0 0 20px rgba(0, 119, 255, 0.05);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 234, 255, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 15px rgba(0, 234, 255, 0.2);
         }
 
-        .card h2 {
+.card h2 {
             font-family: 'Segoe UI', sans-serif;
             font-size: 32px;
             font-weight: 900;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: #ffffff;
-            text-shadow: 0 0 8px #00eaff, 0 0 15px rgba(0,234,255,.7);
+            text-shadow: 0 0 8px #00eaff, 0 0 15px rgba(0, 119, 255, 0.4);
             transition: .3s;
         }
 
@@ -82,16 +107,16 @@ header p{
             font-weight: 500;
             line-height: 1.6;
             letter-spacing: .5px;
-            color: #e5faff;
+            color: #8fa0ba;
         }
 
-        .card:nth-child(1) h2 { color: #00eaff; }
-        .card:nth-child(2) h2 { color: #00ff9d; }
-        .card:nth-child(3) h2 { color: #ffd700; }
-        .card:nth-child(4) h2 { color: #ff6bff; }
-
-        .card:hover h2 { transform: scale(1.05); }
-        .card:hover p { color: white; }
+        /* Mature tech color alternating accents */
+        .card:nth-child(1) h2 { color: #00eaff; } /* Ice Blue */
+        .card:nth-child(2) h2 { color: #0077ff; } /* Deep Tech Blue */
+        .card:nth-child(3) h2 { color: #ffffff; } /* White Accent */
+        .card:nth-child(4) h2 { color: #00eaff; } 
+        .card:nth-child(5) h2 { color: #0077ff; } 
+        .card:nth-child(6) h2 { color: #ffffff; }
 
         
         .motherboard-section {
@@ -103,42 +128,42 @@ header p{
         .motherboard-section h2 {
             font-size: 35px;
             color: #00eaff;
-            text-shadow: 0 0 15px cyan;
+            text-shadow: 0 0 15px rgba(0, 119, 255, 0.6);
         }
 
         .motherboard-container {
             position: relative;
             width: 100%;
-            max-width: 1200px; /* Adjust to match your image size if needed */
+            max-width: 1200px;
             margin: auto;
             overflow: hidden;
         }
 
-        img{
-    max-width:100%;
-    height:auto;
-    display:block;
-}
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
 
-.motherboard-image{
-    width:100%;
-    height:auto;
-    object-fit:contain;
-}
+        .motherboard-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
 
-        
         .part {
             position: absolute;
             cursor: pointer;
-            opacity: 0.3;
+            opacity: 0.15;
             transition: all 0.2s ease;
-            box-shadow: 0 0 10px rgba(0, 234, 255, 0.5);
+            box-shadow: 0 0 10px rgba(0, 234, 255, 0.4);
         }
 
         .part:hover {
             transform: scale(1.01);
-            opacity: 0.65;
-            box-shadow: 0 0 20px cyan;
+            opacity: 0.5;
+            box-shadow: 0 0 25px #00eaff;
+            outline: 2px solid #0077ff;
         }
 
         .io_ports { top: 2%; left: 6%; width: 10%; height: 55%; background-color: lightblue; }
@@ -163,7 +188,7 @@ header p{
         #partInfo {
             margin-top: 20px;
             padding: 25px;
-            background: rgba(255, 255, 255, .12);
+            background: rgba(13, 19, 33, 0.85);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(0, 234, 255, 0.2);
             border-radius: 20px;
@@ -172,13 +197,14 @@ header p{
             width: min(100%,1000px);
             margin-left: auto;
             margin-right: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
         }
 
         #partInfo h3 {
             color: #00eaff;
             margin-top: 0;
             font-size: 24px;
-            border-bottom: 2px solid rgba(0, 234, 255, 0.3);
+            border-bottom: 2px solid rgba(0, 119, 255, 0.3);
             padding-bottom: 8px;
         }
 
@@ -190,10 +216,13 @@ header p{
         }
 
         .component-item {
-            background: rgba(0, 234, 255, 0.1);
+            background: rgba(0, 234, 255, 0.06);
             border-left: 4px solid #00eaff;
             padding: 12px;
             border-radius: 0 10px 10px 0;
+            border-top: 1px solid rgba(0, 234, 255, 0.1);
+            border-right: 1px solid rgba(0, 234, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 234, 255, 0.1);
         }
 
         .component-item stroke {
@@ -228,7 +257,8 @@ header p{
         .component-img:hover {
             transform: scale(1.05);
         }
-        /* Mobile Layout Configuration */
+        
+/* Mobile Layout Configuration */
         @media screen and (max-width: 768px) {
             header { 
                 padding: 20px; 
@@ -316,7 +346,7 @@ header p{
             height: 3px;
             background-color: #00eaff;
             border-radius: 3px;
-            box-shadow: 0 0 8px cyan;
+            box-shadow: 0 0 8px rgba(0, 234, 255, 0.6);
             transition: all 0.3s ease;
         }
 
@@ -327,8 +357,8 @@ header p{
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 15, 50, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(6, 9, 19, 0.97);
+            backdrop-filter: blur(25px);
             z-index: 1000;
             display: flex;
             justify-content: center;
@@ -345,18 +375,18 @@ header p{
 
         .overlay-content {
             width: min(90%, 550px);
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(0, 234, 255, 0.3);
+            background: rgba(13, 19, 33, 0.85);
+            border: 1px solid rgba(0, 234, 255, 0.25);
             border-radius: 25px;
             padding: 35px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 15px rgba(0,234,255,0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,119,255,0.05);
             text-align: center;
         }
 
         .overlay-content h2 {
             color: #00eaff;
             margin-top: 0;
-            text-shadow: 0 0 10px cyan;
+            text-shadow: 0 0 10px rgba(0, 119, 255, 0.5);
             font-size: 28px;
         }
 
@@ -365,19 +395,20 @@ header p{
             align-items: center;
             justify-content: center;
             gap: 10px;
-            background: #1877f2;
+            background: linear-gradient(90deg, #00eaff, #0077ff);
             color: white;
             text-decoration: none;
             padding: 12px 25px;
             border-radius: 50px;
             font-weight: bold;
             margin: 15px 0 30px 0;
-            box-shadow: 0 5px 15px rgba(24,119,242,0.4);
-            transition: transform 0.2s;
+            box-shadow: 0 5px 15px rgba(0, 119, 255, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .fb-link:hover {
             transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 234, 255, 0.5);
         }
 
         /* Star Rating Elements */
@@ -398,7 +429,7 @@ header p{
 
         .stars label {
             font-size: 35px;
-            color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.15);
             cursor: pointer;
             transition: color 0.2s;
         }
@@ -406,26 +437,32 @@ header p{
         .stars label:hover,
         .stars label:hover ~ label,
         .stars input:checked ~ label {
-            color: #ffd700;
-            text-shadow: 0 0 10px #ffd700;
+            color: #00eaff;
+            text-shadow: 0 0 10px #00eaff;
         }
 
         .feedback-text {
             width: 100%;
             height: 80px;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.5);
             border: 1px solid rgba(0,234,255,0.2);
             border-radius: 10px;
             padding: 10px;
             color: white;
             resize: none;
             margin-top: 15px;
+            outline: none;
+        }
+        
+        .feedback-text:focus {
+            border-color: #00eaff;
+            box-shadow: 0 0 8px rgba(0, 234, 255, 0.3);
         }
 
         .submit-btn {
-            background: linear-gradient(90deg, #00eaff, #00ff9d);
+            background: linear-gradient(90deg, #00eaff, #0077ff);
             border: none;
-            color: #001450;
+            color: #ffffff;
             font-weight: bold;
             padding: 12px 30px;
             border-radius: 50px;
@@ -433,16 +470,19 @@ header p{
             margin-top: 15px;
             width: 100%;
             transition: 0.3s;
+            letter-spacing: 0.5px;
         }
 
         .submit-btn:hover {
-            box-shadow: 0 0 15px #00ff9d;
-        }    
+            box-shadow: 0 0 15px #00eaff;
+            transform: translateY(-1px);
+        }   
     </style>
 </head>
 <body>
+<img src="motherboard-background.png" class="background-img" alt="motherboard-background">
 
-        <!-- Three-Line Hamburger Button -->
+    <!-- Three-Line Hamburger Button -->
     <button class="menu-btn" onclick="toggleOverlay()">
         <span></span>
         <span></span>
@@ -453,16 +493,15 @@ header p{
     <div id="overlayMenu" class="overlay-page">
         <div class="overlay-content">
             <h2>📱 Contact & Feedback</h2>
-            <p>Have questions or suggestions? Reach out to us directly!</p>
+            <p style="color: #8fa0ba;">Have questions or suggestions? Reach out to us directly!</p>
             
-            <!-- Replace the href below with your actual Facebook Profile link -->
             <a href="https://www.facebook.com/share/19N6cnn6QK/" target="_blank" class="fb-link">
                 🔵 Adrian A. Cobrilla
             </a>
 
             <hr style="border:0; border-top:1px solid rgba(0,234,255,0.2); margin:20px 0;">
 
-            <h3>Rate Our Page</h3>
+            <h3 style="color: #00eaff;">Rate Our Page</h3>
             <div class="rating-box">
                 <div class="stars">
                     <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
@@ -514,12 +553,12 @@ header p{
                 <p>Report hardware or software system failures for instant AI diagnosis</p>
             </div>
         </a>
-           <a href="rufus-tutorial.html" style="text-decoration:none;color:white;">
+        <a href="rufus-tutorial.html" style="text-decoration:none;color:white;">
             <div class="card">
                 <h2>Rufus Deployment Center</h2>
                 <p>Laboratory setup, ISO flashing documentation, and troubleshooting guide</p>
             </div>
-           </a>
+        </a>
     </div>
 
     <section class="motherboard-section">
@@ -608,15 +647,15 @@ header p{
 
         // If clicked again, reset to the motherboard definition
         if (window.currentSelectedPart === part) {
-            window.currentSelectedPart = ""; // Clear track
-            document.getElementById("partInfo").innerHTML = `
-                <h3>Interactive Guide</h3>
-                <p style="font-weight: bold; color: #00eaff; margin-bottom: 5px;">What is a Motherboard?</p>
-                <p style="margin-top: 0; color: #e5faff; font-size: 16px; line-height: 1.5;">The motherboard is the main printed circuit board (PCB) inside a computer. It serves as the central hub that connects and allows communication between the CPU, RAM, storage drives, graphics cards, and all other physical internal or external peripherals.</p>
-                <hr style="border: 0; border-top: 1px solid rgba(0, 234, 255, 0.2); margin: 15px 0;">
-                <p>Click a highlighted motherboard zone to view its details and see what components connect there.</p>`;
-            return; // Stop the function here
-        }
+                window.currentSelectedPart = ""; 
+                document.getElementById("partInfo").innerHTML = `
+                    <h3>Interactive Guide</h3>
+                    <p style="font-weight: bold; color: #00eaff; margin-bottom: 5px;">What is a Motherboard?</p>
+                    <p style="margin-top: 0; color: #e5faff; font-size: 16px; line-height: 1.5;">The motherboard is the main printed circuit board (PCB) inside a computer. It serves as the central hub that connects and allows communication between the CPU, RAM, storage drives, graphics cards, and all other physical internal or external peripherals.</p>
+                    <hr style="border: 0; border-top: 1px solid rgba(0, 119, 255, 0.3); margin: 15px 0;">
+                    <p style="color: #8fa0ba;">Click a highlighted motherboard zone to view its details and see what components connect there.</p>`;
+                return; 
+            }
         window.currentSelectedPart = part; // Update track
 
             if (part == "CPU Socket") {
