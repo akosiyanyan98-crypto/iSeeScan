@@ -2,8 +2,37 @@
 <html>
 <head>
 <title>iSeeScan Login</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
+
+input,
+button{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+input{
+    border:none;
+    margin-top:20px;
+}
+
+button{
+    margin-top:20px;
+    border:none;
+    background:#00d4ff;
+    color:#111827;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
 /* Welcome Logo Animation */
 
@@ -120,43 +149,92 @@ body{
 .container{
     background:#1f2937;
     padding:40px;
+    width:min(90%,380px);
     border-radius:20px;
-    width:350px;
     text-align:center;
-    box-shadow:0 0 20px rgba(0,0,0,0.5);
+    box-shadow:0 0 20px rgba(0,0,0,.5);
 }
 
 h1{
     color:#00d4ff;
-    font-size:40px;
+    font-size:clamp(2rem,5vw,2.8rem);
+    margin-bottom:10px;
 }
 
 input{
-    width:90%;
-    padding:12px;
-    border-radius:10px;
-    border:none;
+    width:100%;
+    padding:14px;
     margin-top:20px;
+    border:none;
+    border-radius:10px;
     font-size:16px;
 }
 
 button{
+    width:100%;
     margin-top:20px;
-    padding:12px 30px;
+    padding:14px;
     border:none;
     border-radius:10px;
     background:#00d4ff;
     color:#111827;
     font-size:18px;
+    font-weight:bold;
     cursor:pointer;
+    transition:.3s;
 }
 
 button:hover{
     background:white;
+    transform:translateY(-2px);
 }
 
 p{
     color:#d1d5db;
+}
+
+/* Mobile Layout Configuration */
+        @media (max-width:768px){
+
+body{
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    padding:25px;
+}
+
+.welcome-logo h1{
+    font-size:42px;
+}
+
+h1{
+    font-size:32px;
+}
+
+p{
+    font-size:15px;
+}
+
+input{
+    font-size:16px;
+    padding:12px;
+}
+
+button{
+    font-size:16px;
+    padding:12px;
+}
+
+}
+
+@media (min-width:1200px){
+
+.container{
+    width:420px;
+}
+
 }
 
 </style>
@@ -179,8 +257,6 @@ p{
 <p>Enter your nickname to continue</p>
 
 <input id="nickname" type="text" placeholder="Your nickname">
-
-<br>
 
 <button onclick="enterSite()">Enter</button>
 
