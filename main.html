@@ -50,8 +50,7 @@ header p{
     grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
     gap:25px;
 }
-
-        
+            
         .card {
             background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(0,170,255,.08));
             backdrop-filter: blur(15px);
@@ -317,9 +316,189 @@ button,
 }
         }
         
+    /* Menu Button Stylings */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: #00eaff;
+            border-radius: 3px;
+            box-shadow: 0 0 8px cyan;
+            transition: all 0.3s ease;
+        }
+
+        /* Overlay Page Layout */
+        .overlay-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 15, 50, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .overlay-page.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .overlay-content {
+            width: min(90%, 550px);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(0, 234, 255, 0.3);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 15px rgba(0,234,255,0.1);
+            text-align: center;
+        }
+
+        .overlay-content h2 {
+            color: #00eaff;
+            margin-top: 0;
+            text-shadow: 0 0 10px cyan;
+            font-size: 28px;
+        }
+
+        .fb-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: #1877f2;
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            margin: 15px 0 30px 0;
+            box-shadow: 0 5px 15px rgba(24,119,242,0.4);
+            transition: transform 0.2s;
+        }
+
+        .fb-link:hover {
+            transform: scale(1.05);
+        }
+
+        /* Star Rating Elements */
+        .rating-box {
+            margin: 20px 0;
+        }
+
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-direction: row-reverse;
+        }
+
+        .stars input {
+            display: none;
+        }
+
+        .stars label {
+            font-size: 35px;
+            color: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .stars label:hover,
+        .stars label:hover ~ label,
+        .stars input:checked ~ label {
+            color: #ffd700;
+            text-shadow: 0 0 10px #ffd700;
+        }
+
+        .feedback-text {
+            width: 100%;
+            height: 80px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(0,234,255,0.2);
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            resize: none;
+            margin-top: 15px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(90deg, #00eaff, #00ff9d);
+            border: none;
+            color: #001450;
+            font-weight: bold;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            box-shadow: 0 0 15px #00ff9d;
+        }    
     </style>
 </head>
 <body>
+
+        <!-- Three-Line Hamburger Button -->
+    <button class="menu-btn" onclick="toggleOverlay()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Interactive Overlay Screen for Feedback & Contacts -->
+    <div id="overlayMenu" class="overlay-page">
+        <div class="overlay-content">
+            <h2>📱 Contact & Feedback</h2>
+            <p>Have questions or suggestions? Reach out to us directly!</p>
+            
+            <!-- Replace the href below with your actual Facebook Profile link -->
+            <a href="https://www.facebook.com/share/19N6cnn6QK/" target="_blank" class="fb-link">
+                🔵 Adrian A. Cobrilla
+            </a>
+
+            <hr style="border:0; border-top:1px solid rgba(0,234,255,0.2); margin:20px 0;">
+
+            <h3>Rate Our Page</h3>
+            <div class="rating-box">
+                <div class="stars">
+                    <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+                    <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                    <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+                    <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                    <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+                </div>
+                <textarea class="feedback-text" id="feedbackComment" placeholder="Write your suggestions or review here..."></textarea>
+                <button class="submit-btn" onclick="sendFeedback()">Submit Review</button>
+            </div>
+        </div>
+    </div>
 
     <header>
         <h2 id="welcome"></h2>
@@ -400,6 +579,31 @@ button,
     <div id="content"></div>
 
     <script>
+    
+        // Open/Close functions for overlay setup
+        function toggleOverlay() {
+            let menu = document.getElementById("overlayMenu");
+            menu.classList.toggle("active");
+        }
+
+        // Processing feedback script
+        function sendFeedback() {
+            let ratingValue = document.querySelector('input[name="rating"]:checked');
+            let comment = document.getElementById("feedbackComment").value;
+
+            if(!ratingValue) {
+                alert("Please select a star rating first!");
+                return;
+            }
+
+            alert("Thank you for rating us " + ratingValue.value + " stars!\nYour feedback has been saved.");
+            
+            // Clear selections and close menu wrapper
+            document.querySelector('input[name="rating"]:checked').checked = false;
+            document.getElementById("feedbackComment").value = "";
+            toggleOverlay();
+        }
+    
         function zoomImage(imgElement) {
             let modal = document.getElementById("imageModal");
             let modalImg = document.getElementById("modalImg");
@@ -515,7 +719,7 @@ button,
                         High-speed data channels for <b>External SSDs, Flash Drives, and HD Webcams</b>.
                         <img src="images/usb_3.0.png" class="component-img" alt="USB 3.0 Ports" onclick="zoomImage(this)">
                     </div>
-                               <div class="component-item">
+                    <div class="component-item">
                         <stroke>RJ-45 Ethernet Port</stroke> 
                         Local area network line interface where the <b>LAN / Network Cable</b> snaps in for internet access.
                         <img src="images/rj45_ethernet.png" class="component-img" alt="RJ-45 Ethernet Port" onclick="zoomImage(this)">
