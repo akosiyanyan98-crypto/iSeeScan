@@ -1,7 +1,8 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>iSeeScan</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet">
 
@@ -25,31 +26,37 @@
             padding: 50px;
         }
 
-        h1 {
-            font-size: 60px;
-            color: #00eaff;
-            text-shadow: 0 0 20px cyan;
-        }
+        h1{
+    font-size:clamp(2rem,6vw,4rem);
+}
+
+.logo{
+    font-size:clamp(2rem,5vw,3.5rem);
+}
+
+header p{
+    font-size:clamp(.9rem,2vw,1.2rem);
+}
 
         .logo {
             font-size: 55px;
             filter: drop-shadow(0 0 10px cyan);
         }
 
-        .categories {
-            width: 90%;
-            margin: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-        }
+        .categories{
+    width:min(95%,1400px);
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:25px;
+}
 
         
         .card {
             background: linear-gradient(145deg, rgba(255,255,255,.22), rgba(0,170,255,.08));
             backdrop-filter: blur(15px);
             border: 1px solid rgba(0,234,255,.35);
-            padding: 50px 30px;
+            padding: clamp(20px,4vw,50px);
             border-radius: 30px;
             text-align: center;
             cursor: pointer;
@@ -102,16 +109,23 @@
 
         .motherboard-container {
             position: relative;
-            width: 90%;
+            width: 100%;
+            max-width: 1200px; /* Adjust to match your image size if needed */
             margin: auto;
+            overflow: hidden;
         }
 
-        .motherboard-image {
-            width: 100%;
-            display: block;
-            border-radius: 20px;
-            box-shadow: 0 0 30px cyan;
-        }
+        img{
+    max-width:100%;
+    height:auto;
+    display:block;
+}
+
+.motherboard-image{
+    width:100%;
+    height:auto;
+    object-fit:contain;
+}
 
         
         .part {
@@ -156,7 +170,7 @@
             border-radius: 20px;
             color: white;
             text-align: left;
-            width: 80%;
+            width: min(100%,1000px);
             margin-left: auto;
             margin-right: auto;
         }
@@ -215,6 +229,94 @@
         .component-img:hover {
             transform: scale(1.05);
         }
+        
+        /* Mobile Layout Configuration */
+        @media screen and (max-width:768px){
+
+header{
+    padding:20px;
+}
+
+.categories{
+    grid-template-columns:1fr;
+    width:95%;
+}
+
+.card{
+    padding:25px;
+}
+
+.card h2{
+    font-size:24px;
+}
+
+.card p{
+    font-size:15px;
+}
+
+.motherboard-section{
+    width:100%;
+    padding:10px;
+}
+
+#partInfo{
+    width:100%;
+    padding:18px;
+}
+
+.component-list{
+    grid-template-columns:1fr;
+}
+
+.component-item{
+    font-size:15px;
+}
+
+.problem{
+    width:100%;
+}
+
+.component-img{
+    max-width:100%;
+}
+
+@media (max-width:768px){
+
+.motherboard-container{
+    position:relative;
+    width:700px;
+    margin:auto;
+}
+
+.motherboard-section{
+    overflow-x:auto;
+}
+
+.motherboard-image{
+    width:700px;
+}
+
+}
+@media screen and (min-width:1400px){
+
+body{
+    font-size:18px;
+}
+
+.categories{
+    max-width:1500px;
+}
+
+.motherboard-container{
+    max-width:1300px;
+}
+button,
+.card,
+.part{
+    touch-action:manipulation;
+}
+        }
+        
     </style>
 </head>
 <body>
@@ -413,7 +515,7 @@
                         High-speed data channels for <b>External SSDs, Flash Drives, and HD Webcams</b>.
                         <img src="images/usb_3.0.png" class="component-img" alt="USB 3.0 Ports" onclick="zoomImage(this)">
                     </div>
-                    <div class="component-item">
+                               <div class="component-item">
                         <stroke>RJ-45 Ethernet Port</stroke> 
                         Local area network line interface where the <b>LAN / Network Cable</b> snaps in for internet access.
                         <img src="images/rj45_ethernet.png" class="component-img" alt="RJ-45 Ethernet Port" onclick="zoomImage(this)">
