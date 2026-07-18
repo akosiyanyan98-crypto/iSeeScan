@@ -1,1 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>iSeeScan - Rufus Comprehensive Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(rgba(0,80,255,.5), rgba(0,20,80,.9)),
+            url("https://images.unsplash.com/photo-1518770660439-4636190af475") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            overflow-x: hidden;
+        }
 
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 35px;
+            background: rgba(255,255,255,.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0,234,255,.35);
+            border-radius: 25px;
+        }
+
+        .top-bar { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .back-link { color: #00eaff; background: none; border: none; font-size: 16px; cursor: pointer; text-decoration: none; font-weight: 500; }
+        
+        header { text-align: center; margin-bottom: 40px; }
+        header h1 { color: #00eaff; text-shadow: 0 0 15px cyan; margin: 0; font-size: 32px; }
+        header p { color: #e5faff; font-size: 15px; margin-top: 5px; }
+
+        .section-title {
+            display: block;
+            color: #00eaff;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 40px 0 20px 0;
+            border-bottom: 2px solid rgba(0,234,255,.2);
+            padding-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0,234,255,0.3);
+        }
+
+        .tutorial-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .step-card {
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(0, 234, 255, 0.2);
+            border-radius: 18px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: transform 0.2s ease, border 0.2s ease;
+        }
+
+        .step-card:hover {
+            border-color: #00eaff;
+            transform: translateX(4px);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .step-badge {
+            background: linear-gradient(135deg, #FF3366, #FF6699);
+            color: white;
+            font-weight: 900;
+            font-size: 16px;
+            min-width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(255, 51, 102, 0.4);
+        }
+        
+        .blue-badge {
+            background: linear-gradient(135deg, #0055ff, #00aaff);
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.4);
+        }
+
+        .step-title { font-weight: 700; font-size: 18px; color: #00eaff; }
+        .step-desc { font-size: 14px; color: #e5faff; line-height: 1.6; }
+        .step-desc p { margin: 0 0 12px 0; }
+        .step-desc p:last-child { margin-bottom: 0; }
+        .step-desc ul { margin: 8px 0; padding-left: 20px; }
+        .step-desc li { margin-bottom: 4px; }
+        
+        .component-img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 234, 255, 0.4);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            display: block;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .component-img:hover {
+            opacity: 0.9;
+        }
+
+        .pdf-footer {
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(0, 234, 255, 0.1);
+            border: 1px dashed #00eaff;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 14px;
+            color: #e5faff;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 20px; border-radius: 18px; }
+            header h1 { font-size: 24px !important; }
+            header p { font-size: 13px; }
+            .section-title { font-size: 20px; margin: 30px 0 15px 0; }
+            .step-card { padding: 18px; }
+            .step-title { font-size: 16px; }
+            .step-desc { font-size: 13px; }
+            .component-img { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="top-bar">
+            <a href="main.html" class="back-link">⬅ Back to Dashboard</a>
+        </div>
+        
+        <header>
+            <h1>💾 Rufus Deployment Center</h1>
+            <p>Laboratory Installation & Configuration Documentation</p>
+        </header>
+
+        <!-- ==========================================
+           SECTION 1: QUICK STEPS
+        ========================================== -->
+        <span class="section-title">Using Rufus: Quick Steps</span>
+        
+        <div class="tutorial-grid">
+            <div class="step-card"><div class="step-desc">Open Rufus and insert a USB drive.</div></div>
+            <div class="step-card"><div class="step-desc">Select your USB drive under "Device."</div></div>
+            <div class="step-card"><div class="step-desc">Click SELECT and select an ISO file.</div></div>
+            <div class="step-card"><div class="step-desc">Give your Volume label a name (optional).</div></div>
+            <div class="step-card"><div class="step-desc">Click START.</div></div>
+        </div>
+
+        <!-- ==========================================
+           SECTION 2: DETAILED WALKTHROUGH
+        ========================================== -->
+        <span class="section-title">Using Rufus: Detailed Guide</span>
+
+        <div class="tutorial-grid">
+            <!-- Step 1 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-badge blue-badge">1</div>
+                    <div class="step-title">Download and install Rufus.</div>
+                </div>
+                <div class="step-desc">
+                    <p>You can download Rufus at rufus.ie. Click one of the download links below the “Download” header. Be sure to download the correct version for your system's processor (i.e., 64-bit, 32-bit, ARM64).</p>
+                    <p>To find out your system architecture, click the Windows Start icon and then click the Settings icon. Click System followed by About. Check your system architecture next to "System Type."</p>
+                    <p>Rufus is only available for Windows. It is not available for Mac or Linux.</p>
+                </div>
+                <img src="images/download-rufus.png" class="component-img" alt="Download and install Rufus" onclick="zoomImage(this)">
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-badge blue-badge">2</div>
+                    <div class="step-title">Launch Rufus.</div>
+                </div>
+                <div class="step-desc">
+                    <p>By default, your downloaded files can be found in your Downloads folder. Double-click Rufus to launch the application when the download is complete. No additional installation steps are necessary.</p>
+                </div>
+                <img src="images/rufus-step1.png" class="component-img" alt="Launch Rufus" onclick="zoomImage(this)">
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-badge blue-badge">3</div>
+                    <div class="step-title">Insert a USB drive.</div>
+                </div>
+                <div class="step-desc">
+                    <p>You can insert it in any free USB port on your PC. You'll need a USB drive that is big enough to hold the ".ISO" file you want to write to the USB drive.</p>
+                    <p>Most modern operating systems require a USB drive with at least 4 GB of hard drive space. You should get a USB drive with 8 GB or more of hard drive space.</p>
+                    <p>Rufus will format and erase all data from your USB drive. Transfer any personal files stored on the USB drive to your computer before using Rufus.</p>
+                    <p>Make sure you are using a USB-A type flash drive. Many computers can’t boot from a USB-C type flash drive.</p>
+                </div>
+                <img src="images/rufus-step2.png" class="component-img" alt="Insert a USB drive" onclick="zoomImage(this)">
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-badge blue-badge">4</div>
+                    <div class="step-title">Select your USB drive if needed.</div>
+                </div>
+                <div class="step-desc">
+                    <p>When you insert a USB drive, Rufus will usually detect it automatically. If needed, select your USB drive using the "Device" drop-down menu.</p>
+                    <p>In most cases, your USB drive will be listed as “No_Label.”</p>
+                </div>
+                <img src="images/rufus-step3.png" class="component-img" alt="Select your USB drive if needed" onclick="zoomImage(this)">
+            </div>
+
+            <!-- Step 5 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-badge blue-badge">5</div>
+                    <div class="step-title">Click SELECT.</div>
+                </div>
+                <div class="step-desc">
+                    <p>It's the button on the right-hand side. This opens a file browser that you can use to select an ISO image.</p>
+                    <p>Alternatively, if you want to download a Windows ISO file, click the arrow pointing down next to the "Select" button and select DOWNLOAD. Then, click the DOWNLOAD button. Use the drop-down menu to select the version of Windows you want to download and click Continue.</p>
+                </div>
+                <img src="images/rufus-step4.png" class="component-img" alt="Click SELECT" onclick="zoomImage(this)">
+            </div>
+
+            <!-- Step 6 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-badge blue-badge">6</div>
+                    <div class="step-title">Select an ISO file.</div>
+                </div>
+                <div class="step-desc">
+                    <p>Navigate to where you downloaded the ISO file you want to write to the USB drive, select it, and click Open.</p>
+                    <p>In most cases, you will want to leave the "Partition Scheme," "Target System," and "Image Option" as the default. Rufus can detect these settings automatically.</p>
+                    <p>You can download the Linux Ubuntu ISO file from ubuntu.com/download.</p>
+                </div>
+                <img src="images/rufus-step5.png" class="component-img" alt="Select an ISO file" onclick="zoomImage(this)">
+            </div>
+
+            <!-- Step 7 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-badge blue-badge">7</div>
+                    <div class="step-title">Give the volume label a name (optional).</div>
+                </div>
+                <div class="step-desc">
+                    <p>If you want to give your USB drive a name, enter it in the "Volume Label" field. Otherwise, leave it as is.</p>
+                </div>
+                        <img src="images/rufus-step6.png" class="component-img" alt="Give the volume label a name" onclick="zoomImage(this)">
+            </div>
+
+            <!-- Step 8 -->
+
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-badge blue-badge">8</div>
+                    <div class="step-title">Click START.</div>
+                </div>
+                <div class="step-desc">
+                    <p>It's at the bottom in the lower-right corner. This will start writing the ISO file for Rufus. This may take several minutes.</p>
+                    <p>You may receive a message warning you that any data on the USB drive will be destroyed. This is normal. Click OK to continue.</p>
+                    <p>Do not remove your USB drive until the process is complete.</p>
+                </div>
+                <img src="images/rufus-step7.png" class="component-img" alt="Click START" onclick="zoomImage(this)">
+            </div>
+        </div>
+
+        <!-- ==========================================
+           SECTION 3: TROUBLESHOOTING
+        ========================================== -->
+        <span class="section-title">Troubleshooting</span>
+
+        <div class="tutorial-grid">
+
+            <!-- Troubleshooting Step 1 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-badge">1</div>
+                    <div class="step-title">Device Detection & Verification</div>
+                </div>
+                <img src="images/troubleshooting-step1.png" class="component-img" alt="Device Detection Troubleshooting" onclick="zoomImage(this)">
+                <div class="step-desc">
+                    <p><b>Place a check mark next to “List USB Hard Drives.”</b> Some USB drives may not be compatible with Rufus. Click the arrow icon next to "Show advanced drive properties" and click the checkbox next to "List USB Hard Drives."</p>
+                    <p><b>Try running Rufus as an administrator.</b> If you get an error message that says the creation failed or that Rufus cannot make the USB bootable, try running Rufus as an administrator. To do so, right-click the Rufus launch file and click Run as administrator.</p>
+                    <p><b>Try using a different USB port.</b> If your computer is having a hard time detecting or reading your USB drive, try plugging it into a different port. There may be a problem with the port you are using.</p>
+                </div>
+            </div>
+
+            <!-- Troubleshooting Step 2 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-badge">2</div>
+                    <div class="step-title">Media Constraints & Partitioning Issues</div>
+                </div>
+                <img src="images/troubleshooting-step2.png" class="component-img" alt="Media Constraints Troubleshooting" onclick="zoomImage(this)">
+                <div class="step-desc">
+                    <p><b>Try using another USB flash drive.</b> If you receive an error message that says the USB drive doesn't have enough space or that it has no media on it, you will need to use another USB drive. If it’s an older USB drive, it may not work as well as it once did.</p>
+                    <p><b>Try formatting the USB drive before using Rufus.</b> If you are having issues writing an ISO file to a USB drive, try formatting the USB drive in Windows before using Rufus. To do so, right-click the USB drive in File Explorer and click Format. Choose NTFS, exFAT, or FAT32 as the file system, and then click Start.</p>
+                    <p><b>Choose the correct partition scheme.</b> If you are using an older computer, you may need to choose MBR as the partition scheme. For computers that run newer UEFI hardware, select GPT.</p>
+                </div>
+            </div>
+
+            <!-- Troubleshooting Step 3 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-badge">3</div>
+                    <div class="step-title">System Mount Controls & Image Corruptions</div>
+                </div>
+                <img src="images/troubleshooting-step3.png" class="component-img" alt="System Controls Troubleshooting" onclick="zoomImage(this)">
+                <div class="step-desc">
+                    <p><b>Try re-enabling automounting on your computer.</b> If you receive the message, “Error: [0x00000015] The device is not ready,” you may have previously disabled automounting. Use the following steps to re-enable it.</p>
+                    <ul>
+                        <li>Type “cmd” into the search box in Start or Windows Explorer.</li>
+                        <li>Right-click cmd.exe, then select Run as administrator.</li>
+                        <li>Type “mountvol /e” into the dialog box, then press Enter.</li>
+                        <li>Close the command prompt window, then try using Rufus again.</li>
+                    </ul>
+                    <p><b>Download a fresh copy of the ISO file.</b> If there is a problem writing the ISO file to a USB drive, the ISO file may be corrupt. Try downloading a fresh copy of it. Make sure you download it from an official source.</p>
+                </div>
+            </div>
+
+            <!-- Troubleshooting Step 4 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <div class="step-badge">4</div>
+                    <div class="step-title">BIOS Configuration & Mainboard Handshakes</div>
+                </div>
+                <img src="images/troubleshooting-step4.png" class="component-img" alt="BIOS Configuration Troubleshooting" onclick="zoomImage(this)">
+                <div class="step-desc">
+                    <p><b>Change your PC's boot order.</b> To boot from a USB drive, you will need to boot into your computer's BIOS and set the boot order to boot from a USB drive before your hard drive.</p>
+                    <p><b>Switch ports for older legacy hardware.</b> If your PC is having trouble booting from the USB drive, try switching to a different USB 2.0 port. Some older PCs may have issues with USB 3.0 or higher.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==========================================
+           ARTICLE PDF DOWNLOAD CALLOUT FOOTER
+        ========================================== -->
+        <div class="pdf-footer">
+            📄 If the steps above have been helpful, don't forget to send a feedback in our website for more helpful information.
+        </div>
+
+    </div>
+
+    <script>
+        function zoomImage(imgElement) {
+            console.log("Zooming image:", imgElement.src);
+        }
+    </script>
+</body>
+  </html>
