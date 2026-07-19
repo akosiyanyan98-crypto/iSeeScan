@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iSeeScan - Laboratory Topology Blueprint</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body {
+            margin: 0; color: white;
+            background: linear-gradient(135deg, rgba(6, 11, 25, 0.98) 30%, rgba(0, 20, 50, 0.95) 100%);
+            min-height: 100vh; padding: 40px 20px;
+        }
+        .container { width: min(95%, 900px); margin: auto; }
+        .back-btn {
+            background: rgba(0, 234, 255, 0.1); border: 1px solid #00eaff;
+            color: #00eaff; padding: 10px 20px; border-radius: 50px;
+            cursor: pointer; font-weight: bold; transition: 0.3s; text-decoration: none; display: inline-block;
+        }
+        .back-btn:hover { box-shadow: 0 0 15px rgba(0, 234, 255, 0.4); background: #00eaff; color: #060b19; }
+        h1 { color: #00eaff; text-shadow: 0 0 15px rgba(0, 119, 255, 0.6); margin-top: 30px; }
+        
+        .timeline { position: relative; margin: 40px 0; padding-left: 20px; }
+        .timeline::before {
+            content: ''; position: absolute; left: 39px; top: 0;
+            width: 4px; height: 100%; background: linear-gradient(180deg, #00eaff, #0077ff);
+            border-radius: 2px;
+        }
+        
+        .node-block {
+            position: relative; background: rgba(13, 19, 33, 0.8);
+            border: 1px solid rgba(0, 234, 255, 0.15); padding: 25px;
+            margin-bottom: 30px; border-radius: 20px; margin-left: 60px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+        .node-block::before {
+            content: ''; position: absolute; left: -27px; top: 30px;
+            width: 16px; height: 16px; background: #00eaff;
+            border: 4px solid #060b19; border-radius: 50%; box-shadow: 0 0 10px #00eaff;
+        }
+        .node-block h3 { margin: 0 0 10px 0; color: #00eaff; font-size: 20px; }
+        .node-block p { margin: 0 0 20px 0; color: #a4b3c6; line-height: 1.6; }
+        .badge {
+            display: inline-block; background: rgba(0, 255, 157, 0.15);
+            color: #00ff9d; padding: 4px 12px; border-radius: 6px;
+            font-size: 12px; font-weight: bold; margin-bottom: 10px;
+            text-transform: uppercase; border: 1px solid rgba(0, 255, 157, 0.3);
+        }
+
+        /* --- STYLED IMAGE HOLDER FOR EACH STEP --- */
+        .step-image-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 15px 0 5px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 234, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .step-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="main.html" class="back-btn">← Back to Dashboard</a>
+        <h1>🖥️ Laboratory Network Infrastructure Topology</h1>
+        <p>Follow this absolute step-by-step structural procedure to correctly align and deploy the network architecture loop.</p>
+
+        <div class="timeline">
+            <!-- Step 1 -->
+            <div class="node-block">
+                <span class="badge" style="background: rgba(0, 234, 255, 0.15); color: #00eaff; border-color: rgba(0, 234, 255, 0.3);">Step 1: Equipment Preparation</span>
+                <h3>Provisioning Tools & Cables</h3>
+                <p>Gather your deployment toolkit: two or three network cables, a punch-down tool, and a modular crimping tool. If you do not have pre-fabricated cords, manually fabricate straight-through cables using either the T568A or T568B standard sequence.</p>
+                <div class="step-image-container">
+                    <img src="step1-prep.png" class="step-img" alt="Step 1: Tools and Cable Prep">
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="node-block">
+                <span class="badge">Step 2: Horizontal Run</span>
+                <h3>Workstation Tower to Patch Panel</h3>
+                <p>Strip the outer jacket off one end of the first cable and terminate it into the rear matrix of a patch panel keystone jack using your punch-down tool. Crimp an RJ45 connector onto the opposite end. Both ends must match in pinout standard (if the RJ45 end uses T568A, the punch-down jack must follow T568A guidelines printed on the module). Plug the RJ45 end into the System Unit NIC port.</p>
+                <div class="step-image-container">
+                    <img src="step2-patchpanel.png" class="step-img" alt="Step 2: Punching down to Patch Panel">
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="node-block">
+                <span class="badge">Step 3: Intermediate Patching</span>
+                <h3>Patch Panel to Network Switch</h3>
+                <p>Deploy your second cable, which requires dual RJ45 connector ends. Plug one end into the designated front patch panel port corresponding to your horizontal workstation link, then route the opposite end directly into the matching port assignment interface on your localized Network Switch.</p>
+                <div class="step-image-container">
+                    <img src="step3-switch.png" class="step-img" alt="Step 3: Connecting Patch Panel to Switch">
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="node-block">
+                <span class="badge">Step 4: Gateway Uplink</span>
+                <h3>Network Switch to Core Router</h3>
+                <p>Use your third dual-RJ45 cable to create an uplink patch between an open port on the network switch and the LAN/Internal interface gateway port on your Core Router. Every single cable in this structural pipeline must share the exact same configuration profile (all T568A or all T568B).</p>
+                <div class="step-image-container">
+                    <img src="step4-router.png" class="step-img" alt="Step 4: Connecting Switch to Router">
+                </div>
+            </div>
+
+            <!-- Step 5 -->
+            <div class="node-block" style="border-color: rgba(0, 255, 157, 0.3);">
+                <span class="badge" style="background: rgba(0, 255, 157, 0.15); color: #00ff9d; border-color: rgba(0, 255, 157, 0.3);">Step 5: Connection Validation</span>
+                <h3>Diagnostic Verification & Loop Testing</h3>
+                <p>Power up the system and run validation checks. With the first cable plugged securely into the PC system unit, check the Network Switch LED indicator arrays. A solid or blinking activity light confirms physical layer continuity. Finally, inspect the operating system connection status UI to confirm active data transport.</p>
+                <div class="step-image-container">
+                    <img src="step5-testing.png" class="step-img" alt="Step 5: Testing Connection">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
