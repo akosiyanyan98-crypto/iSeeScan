@@ -1,43 +1,81 @@
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("feedbackForm");
+
+    form.addEventListener("submit", sendFeedback);
+
+});
+
 function sendFeedback(event) {
-    // 1. Prevent the page from automatically refreshing on submit
-    event.preventDefault(); 
 
-    // 2. Safely grab the selected star rating value
+    event.preventDefault();
+
+    const submitBtn = document.querySelector(".submit-btn");
+
+    const email = document.getElementById("sender_email").value.trim();
+
+    const suggestions = document.getElementById("feedbackComment").value.trim();
+
     const selectedRating = document.querySelector('input[name="rating"]:checked');
-    const ratingValue = selectedRating ? selectedRating.value : "No rating given";
 
-    // 3. Build the parms object just like your original sendMail format
-    let parms = {
-        rating: ratingValue,
-        email: document.querySelector('input[name="sender_email"]').value,
-        message: document.getElementById('feedbackComment').value
+    if (!selectedRating) {
+
+        alert("Please select a rating.");
+
+        return;
+
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending...";
+
+    const templateParams = {
+
+        email: email,
+
+        rating: selectedRating.value,
+
+        suggestions: suggestions
+
     };
 
-    // UI Feedback: Optional loading state for your button
-    const submitBtn = document.querySelector('.submit-btn');
-    submitBtn.textContent = 'Sending...';
-    submitBtn.disabled = true;
+    emailjs.send(
+        "service_l9kz9ak",
+        "template_p9qfmno",
+        templateParams
+    )
 
-    // 4. Send using your specific EmailJS credentials
-    emailjs.send("service_l9kz9ak", "template_p9qfmno", parms)
-        .then(() => {
-            alert("Feedback sent successfully!");
-            
-            // Clear the form fields
-            document.getElementById('feedbackForm').reset();
-            
-            // If you have a toggleOverlay function, close it here
-            if (typeof toggleOverlay === "function") {
-                toggleOverlay();
-            }
-        })
-        .catch((err) => {
-            alert("Failed to send feedback. Please try again.");
-            console.error("EmailJS Error:", err);
-        })
-        .finally(() => {
-            // Revert button back to normal
-            submitBtn.textContent = 'Submit Review';
-            submitBtn.disabled = false;
-        });
+    .then(function () {
+
+        alert("✅ Thank you! Your review has been sent.");
+
+        document.getElementById("feedbackForm").reset();
+
+        if (typeof toggleOverlay === "function") {
+
+            toggleOverlay();
+
+        }
+
+    })
+
+    .catch(function (error) {
+
+        console.error(error);
+
+        alert(
+            "❌ Failed to send email.\n\n" +
+            JSON.stringify(error)
+        );
+
+    })
+
+    .finally(function () {
+
+        submitBtn.disabled = false;
+
+        submitBtn.textContent = "Submit Review";
+
+    });
+
 }
