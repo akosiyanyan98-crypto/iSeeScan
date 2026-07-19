@@ -653,24 +653,6 @@ body::before {
             let menu = document.getElementById("overlayMenu");
             menu.classList.toggle("active");
         }
-
-        // Processing feedback script
-        function sendFeedback() {
-            let ratingValue = document.querySelector('input[name="rating"]:checked');
-            let comment = document.getElementById("feedbackComment").value;
-
-            if(!ratingValue) {
-                alert("Please select a star rating first!");
-                return;
-            }
-
-            alert("Thank you for rating us " + ratingValue.value + " stars!\nYour feedback has been saved.");
-            
-            // Clear selections and close menu wrapper
-            document.querySelector('input[name="rating"]:checked').checked = false;
-            document.getElementById("feedbackComment").value = "";
-            toggleOverlay();
-        }
     
         function zoomImage(imgElement) {
             let modal = document.getElementById("imageModal");
