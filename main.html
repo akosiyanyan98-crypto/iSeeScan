@@ -7,6 +7,69 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <style>
+
+        /* --- CAMOUFLAGE CROPPED CABLE STYLES --- */
+.cable-section {
+    width: min(95%, 1000px);
+    margin: 50px auto;
+    text-align: center;
+    background: rgba(13, 19, 33, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 234, 255, 0.2);
+    border-radius: 30px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.cable-section h2 {
+    font-size: 35px;
+    color: #00eaff;
+    text-shadow: 0 0 15px rgba(0, 119, 255, 0.6);
+    margin-top: 0;
+}
+
+/* Acts as the boundary frame that cuts off anything zoomed past it */
+.cable-container {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    margin: 20px auto 0 auto;
+    overflow: hidden; /* Crucial: chops off the cut edges when zoomed */
+    border-radius: 15px; 
+}
+
+/* Zooms into the image and shifts the cut tips safely off the left edge */
+.cable-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transform: scale(1.35) translateX(-8%); 
+    transform-origin: center left;
+}
+
+/* Adjusted hotspot targets to match the newly shifted zoom coordinates */
+.cable-part {
+    position: absolute;
+    cursor: pointer;
+    opacity: 0.15;
+    transition: all 0.2s ease;
+    background-color: #0077ff;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 234, 255, 0.5);
+}
+
+.cable-part:hover {
+    transform: scale(1.03);
+    opacity: 0.45;
+    box-shadow: 0 0 25px #00eaff;
+    outline: 2px solid #00eaff;
+}
+
+/* Updated coordinate boxes to overlay the zoomed cables perfectly */
+.top_rj45 { top: 18%; left: 8%; width: 55%; height: 38%; }
+.bottom_rj45 { top: 56%; left: 8%; width: 55%; height: 38%; }
+        
         * {
             box-sizing: border-box;
             font-family: 'Poppins', 'Segoe UI', sans-serif;
@@ -607,6 +670,18 @@ body::before {
         </a>
     </div>
 
+        <!-- --- CONNECTIVITY GUIDE PLACED BEFORE MOTHERBOARD --- -->
+<section class="cable-section">
+    <h2>🔌 Network Connectivity Guide</h2>
+    <p>Click on the individual RJ45 connectors to open detailed technical guides.</p>
+    <div class="cable-container">
+        <img src="rj45-cable.png" class="cable-image" alt="RJ45 Network Cables">
+        <!-- Direct page routing links replace the old info window functions -->
+        <div class="cable-part top_rj45" onclick="window.location.href='cable-guide.html'"></div>
+        <div class="cable-part bottom_rj45" onclick="window.location.href='network-topology.html'"></div>
+    </div>
+</section>
+    
     <section class="motherboard-section">
         <h2>🖥️ Motherboard Parts Guide</h2>
         <p>Click the highlighted visual blocks to learn what components plug into them.</p>
