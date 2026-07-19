@@ -478,30 +478,44 @@ body::before {
             transform: translateY(-1px);
         }   
     </style>
+     <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "vtWQlgJVYx-WCGNHC",
+      });
+   })();
+</script>
+<script src="script.js"></script>
 </head>
 <body>
 <img src="motherboard-background.png" class="background-img" alt="motherboard-background">
 
     <!-- Three-Line Hamburger Button -->
-    <button class="menu-btn" onclick="toggleOverlay()">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
+<button class="menu-btn" onclick="toggleOverlay()">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
 
-    <!-- Interactive Overlay Screen for Feedback & Contacts -->
-    <div id="overlayMenu" class="overlay-page">
-        <div class="overlay-content">
-            <h2>📱 Contact & Feedback</h2>
-            <p style="color: #8fa0ba;">Have questions or suggestions? Reach out to us directly!</p>
-            
-            <a href="https://www.facebook.com/share/19N6cnn6QK/" target="_blank" class="fb-link">
-                🔵 Adrian A. Cobrilla
-            </a>
+<!-- Interactive Overlay Screen for Feedback & Contacts -->
+<div id="overlayMenu" class="overlay-page">
+    <div class="overlay-content">
+        <h2>📱 Contact & Feedback</h2>
+        <p style="color: #8fa0ba;">Have questions or suggestions? Reach out to us directly!</p>
+        
+        <a href="https://www.facebook.com/share/19N6cnn6QK/" target="_blank" class="fb-link">
+            🔵 Adrian A. Cobrilla
+        </a>
 
-            <hr style="border:0; border-top:1px solid rgba(0,234,255,0.2); margin:20px 0;">
+        <hr style="border:0; border-top:1px solid rgba(0,234,255,0.2); margin:20px 0;">
 
-            <h3 style="color: #00eaff;">Rate Our Page</h3>
+        <h3 style="color: #00eaff;">Rate Our Page</h3>
+        
+        <!-- WRAPPED IN A FORM TAG FOR EMAILJS -->
+        <form id="feedbackForm" onsubmit="sendFeedback(event)">
             <div class="rating-box">
                 <div class="stars">
                     <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
@@ -510,12 +524,20 @@ body::before {
                     <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
                     <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
                 </div>
-                <textarea class="feedback-text" id="feedbackComment" placeholder="Write your suggestions or review here..."></textarea>
-                <button class="submit-btn" onclick="sendFeedback()">Submit Review</button>
-            </div>
-        </div>
-    </div>
 
+                <!-- NEW: SENDER EMAIL FIELD -->
+                <input type="email" name="sender_email" class="feedback-email" placeholder="Your email address" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid rgba(0,234,255,0.4); background: #1a233a; color: #fff;" required>
+
+                <!-- TEXTAREA WITH NAME ATTRIBUTE -->
+                <textarea class="feedback-text" name="feedback_comment" id="feedbackComment" placeholder="Write your suggestions or review here..." required></textarea>
+                
+                <!-- BUTTON IS NOW TYPE="SUBMIT" -->
+                <button type="submit" class="submit-btn">Submit Review</button>
+            </div>
+        </form>
+    </div>
+</div>
+    
     <header>
         <h2 id="welcome"></h2>
         <h1><span class="logo">🔍</span> iSeeScan</h1>
@@ -874,77 +896,6 @@ body::before {
     <div id="imageModal" style="display:none; position:fixed; z-index:9999; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); align-items:center; justify-content:center; cursor:zoom-out;" onclick="this.style.display='none'">
         <img id="modalImg" style="max-width:90%; max-height:90%; border-radius:10px; box-shadow: 0 0 30px rgba(0,234,255,0.5); border: 2px solid #00eaff;">
     </div>
-    <!-- 1. Include the Supabase CDN Script inside your <head> or at the top of your body -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- 2. The Feedback UI Component -->
-<div class="feedback-container" style="background: rgba(13, 19, 33, 0.85); border: 1px solid rgba(0, 234, 255, 0.25); border-radius: 20px; padding: 30px; max-width: 400px; margin: 20px auto; color: white;">
-    <h3 style="color: #00eaff; margin-bottom: 15px;">System Feedback Center</h3>
-    
-    <label>Select Rating:</label>
-    <div class="star-rating" style="display: flex; gap: 8px; margin: 10px 0 20px 0; font-size: 24px; cursor: pointer;">
-        <span onclick="setRating(1)">⭐</span>
-        <span onclick="setRating(2)">⭐</span>
-        <span onclick="setRating(3)">⭐</span>
-        <span onclick="setRating(4)">⭐</span>
-        <span onclick="setRating(5)">⭐</span>
-    </div>
-    
-    <label>Suggestions & Bug Reports:</label>
-    <textarea id="userSuggestions" placeholder="What should we improve?" style="width: 100%; height: 100px; margin-top: 8px; background: #0a0f1d; border: 1px solid #1a2333; border-radius: 10px; color: white; padding: 10px; resize: none; outline: none;"></textarea>
-    
-    <button onclick="submitFeedback()" style="width: 100%; margin-top: 15px; padding: 12px; border: none; border-radius: 10px; background: linear-gradient(90deg, #00eaff, #0077ff); color: white; font-weight: bold; cursor: pointer;">Submit Diagnostics</button>
-</div>
-
-<!-- 3. Core Database Logic -->
-<script>
-    // Initialize Supabase Connection
-    const SUPABASE_URL = "https://zdqnnccvzcftxlmwaafy.supabase.co"; 
-    const SUPABASE_ANON_KEY = "sb_publishable_x5VALmMAjVgUUTqNDlI7Zw_VK96h3pG";
-    const supabase = @supabase/supabase-js.createClient(https://zdqnnccvzcftxlmwaafy.supabase.co, sb_publishable_x5VALmMAjVgUUTqNDlI7Zw_VK96h3pG);
-
-    let currentRating = 0;
-
-    // Visual star tracker behavior
-    function setRating(stars) {
-        currentRating = stars;
-        const starElements = document.querySelectorAll('.star-rating span');
-        starElements.forEach((el, index) => {
-            el.style.opacity = index < stars ? "1.0" : "0.3";
-        });
-    }
-    // Set a baseline look on page load
-    setRating(5);
-
-    async function submitFeedback() {
-        // Automatically fetches the current user's local profile info from your login structure
-        const nickname = localStorage.getItem("userNickname") || "Anonymous User";
-        const suggestions = document.getElementById("userSuggestions").value;
-
-        if (!suggestions.trim()) {
-            alert("Please include some text details before sending.");
-            return;
-        }
-
-        // Write the operational logs straight to the cloud database
-        const { data, error } = await supabase
-            .from('user_feedback')
-            .insert([
-                { 
-                    nickname: nickname, 
-                    rating: currentRating, 
-                    suggestions: suggestions 
-                }
-            ]);
-
-        if (error) {
-            console.error("Database sync error:", error);
-            alert("Transmission failed. Check console configurations.");
-        } else {
-            alert("Feedback logged successfully. Thank you!");
-            document.getElementById("userSuggestions").value = "";
-        }
-    }
-</script>
 </body>
 </html>
