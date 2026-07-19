@@ -31,6 +31,8 @@ function sendFeedback(event) {
 
     const templateParams = {
 
+        feedback: "📝 iSeeScan Feedback Report",
+
         email: email,
 
         rating: selectedRating.value,
