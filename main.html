@@ -478,16 +478,16 @@ body::before {
             transform: translateY(-1px);
         }   
     </style>
-     <script type="text/javascript"
-        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+      <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+(function () {
+    emailjs.init({
+        publicKey: "vtWQlgJVYx-WCGNHC"
+    });
+})();
 </script>
-<script type="text/javascript">
-   (function(){
-      emailjs.init({
-        publicKey: "vtWQlgJVYx-WCGNHC",
-      });
-   })();
-</script>
+
 <script src="script.js"></script>
 </head>
 <body>
@@ -515,26 +515,49 @@ body::before {
         <h3 style="color: #00eaff;">Rate Our Page</h3>
         
         <!-- WRAPPED IN A FORM TAG FOR EMAILJS -->
-        <form id="feedbackForm" onsubmit="sendFeedback(event)">
-            <div class="rating-box">
-                <div class="stars">
-                    <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
-                    <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
-                    <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
-                    <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
-                    <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
-                </div>
+        <form id="feedbackForm">
 
-                <!-- NEW: SENDER EMAIL FIELD -->
-                <input type="email" name="sender_email" class="feedback-email" placeholder="Your email address" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid rgba(0,234,255,0.4); background: #1a233a; color: #fff;" required>
+    <div class="rating-box">
 
-                <!-- TEXTAREA WITH NAME ATTRIBUTE -->
-                <textarea class="feedback-text" name="feedback_comment" id="feedbackComment" placeholder="Write your suggestions or review here..." required></textarea>
-                
-                <!-- BUTTON IS NOW TYPE="SUBMIT" -->
-                <button type="submit" class="submit-btn">Submit Review</button>
-            </div>
-        </form>
+        <div class="stars">
+            <input type="radio" id="star5" name="rating" value="5">
+            <label for="star5">★</label>
+
+            <input type="radio" id="star4" name="rating" value="4">
+            <label for="star4">★</label>
+
+            <input type="radio" id="star3" name="rating" value="3">
+            <label for="star3">★</label>
+
+            <input type="radio" id="star2" name="rating" value="2">
+            <label for="star2">★</label>
+
+            <input type="radio" id="star1" name="rating" value="1">
+            <label for="star1">★</label>
+        </div>
+
+        <input
+            type="email"
+            id="sender_email"
+            name="sender_email"
+            class="feedback-email"
+            placeholder="Your email address"
+            required>
+
+        <textarea
+            id="feedbackComment"
+            name="feedback_comment"
+            class="feedback-text"
+            placeholder="Write your suggestions or review here..."
+            required></textarea>
+
+        <button type="submit" class="submit-btn">
+            Submit Review
+        </button>
+
+    </div>
+
+</form> 
     </div>
 </div>
     
