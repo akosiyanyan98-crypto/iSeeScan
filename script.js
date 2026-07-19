@@ -1,30 +1,42 @@
 function sendFeedback(event) {
-    event.preventDefault(); // Prevents the page from reloading
+    // 1. Prevent the page from automatically refreshing on submit
+    event.preventDefault(); 
 
-    const form = event.target;
-    const submitBtn = form.querySelector('.submit-btn');
-    
-    // UI Feedback: Show loading state
+    // 2. Safely grab the selected star rating value
+    const selectedRating = document.querySelector('input[name="rating"]:checked');
+    const ratingValue = selectedRating ? selectedRating.value : "No rating given";
+
+    // 3. Build the parms object just like your original sendMail format
+    let parms = {
+        rating: ratingValue,
+        email: document.querySelector('input[name="sender_email"]').value,
+        message: document.getElementById('feedbackComment').value
+    };
+
+    // UI Feedback: Optional loading state for your button
+    const submitBtn = document.querySelector('.submit-btn');
     submitBtn.textContent = 'Sending...';
     submitBtn.disabled = true;
 
-    // Replace these with your actual dashboard IDs
-    const serviceID = 'service_l9kz9ak';
-    const templateID = 'template_p9qfmno';
-
-    // EmailJS automatically collects all inputs with 'name' attributes inside the form
-    emailjs.sendForm(serviceID, templateID, form)
+    // 4. Send using your specific EmailJS credentials
+    emailjs.send("service_l9kz9ak", "template_p9qfmno", parms)
         .then(() => {
-            alert('Thank you for your feedback!');
-            form.reset(); // Clears all inputs and stars
-            toggleOverlay(); // Closes the overlay menu
+            alert("Feedback sent successfully!");
+            
+            // Clear the form fields
+            document.getElementById('feedbackForm').reset();
+            
+            // If you have a toggleOverlay function, close it here
+            if (typeof toggleOverlay === "function") {
+                toggleOverlay();
+            }
         })
         .catch((err) => {
-            alert('Failed to send feedback. Please try again.');
-            console.error('EmailJS Error:', err);
+            alert("Failed to send feedback. Please try again.");
+            console.error("EmailJS Error:", err);
         })
         .finally(() => {
-            // Reset button state
+            // Revert button back to normal
             submitBtn.textContent = 'Submit Review';
             submitBtn.disabled = false;
         });
